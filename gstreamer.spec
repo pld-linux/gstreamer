@@ -5,13 +5,6 @@ Version:	0.3.2
 Release:	1
 License:	LGPL
 Group:		Libraries
-Group(de):	Libraries
-Group(es):	Bibliotecas
-Group(fr):	Librairies
-Group(pl):	Biblioteki
-Group(pt_BR):	Bibliotecas
-Group(ru):	Библиотеки
-Group(uk):	Б╕бл╕отеки
 Source0:	http://prdownloads.sourceforge.net/gstreamer/%{name}-%{version}.tar.bz2
 URL:		http://gstreamer.net/
 BuildRequires:	glib2-devel
@@ -40,13 +33,6 @@ nowych typСw danych lub mo©liwo╤ci obrСbki.
 Summary:	Include files for GStreamer streaming-media framework
 Summary(pl):	Pliki nagЁСwkowe do ╤rodowiska obrСbki strumieni GStreamer
 Group:		Development/Libraries
-Group(de):	Entwicklung/Libraries
-Group(es):	Desarrollo/Bibliotecas
-Group(fr):	Development/Librairies
-Group(pl):	Programowanie/Biblioteki
-Group(pt_BR):	Desenvolvimento/Bibliotecas
-Group(ru):	Разработка/Библиотеки
-Group(uk):	Розробка/Б╕бл╕отеки
 Requires:	%{name} = %{version}
 
 %description devel
@@ -61,13 +47,6 @@ i wtyczek do GStreamera.
 Summary:	GStreamer static libraries
 Summary(pl):	Biblioteki statyczne GStreamer
 Group:		Development/Libraries
-Group(de):	Entwicklung/Libraries
-Group(es):	Desarrollo/Bibliotecas
-Group(fr):	Development/Librairies
-Group(pl):	Programowanie/Biblioteki
-Group(pt_BR):	Desenvolvimento/Bibliotecas
-Group(ru):	Разработка/Библиотеки
-Group(uk):	Розробка/Б╕бл╕отеки
 Requires:	%{name}-devel = %{version}
 
 %description static
