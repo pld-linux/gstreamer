@@ -2,7 +2,7 @@ Summary:	GStreamer Streaming-media framework runtime
 Summary(pl):	GStreamer - biblioteki ¶rodowiska do obróbki strumieni
 Name:		gstreamer
 Version:	0.8.8
-Release:	1
+Release:	2
 License:	LGPL
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.bz2
@@ -127,7 +127,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/ldconfig
-%{_bindir}/gst-register --gst-registry=%{_gstcachedir}/registry.xml > /dev/null 2> /dev/null
+%{_bindir}/gst-register --gst-registry=%{_gstcachedir}/registry.xml > /dev/null 2> /dev/null ||:
 
 %postun	-p /sbin/ldconfig
 
