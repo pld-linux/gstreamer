@@ -1,11 +1,11 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl):	GStreamer - biblioteki ¶rodowiska do obróbki strumieni
 Name:		gstreamer
-Version:	0.5.2
+Version:	0.6.0
 Release:	1
 License:	LGPL
 Group:		Libraries
-Source0:	http://ftp.gnome.org/pub/gnome/sources/%{name}/0.5/%{name}-%{version}.tar.bz2
+Source0:	http://ftp.gnome.org/pub/gnome/sources/%{name}/0.6/%{name}-%{version}.tar.bz2
 URL:		http://gstreamer.net/
 BuildRequires:	glib2-devel >= 2.0.1
 BuildRequires:	libxml2-devel >= 2.4.17
@@ -13,6 +13,9 @@ BuildRequires:	nasm
 BuildRequires:	pkgconfig
 Requires(post):	/sbin/ldconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define		_gstlibdir			%{_libdir}/gstreamer-0.6
+%define		_gstincludedir	%{_includedir}/gstreamer-0.6
 
 %description
 GStreamer is a streaming-media framework, based on graphs of filters
@@ -91,19 +94,19 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*
-%attr(755,root,root) %{_libdir}/%{name}-0.5/*.so
+%attr(755,root,root) %{_gstlibdir}/*.so
 %{_mandir}/man1/*
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/lib*.so
 %{_libdir}/lib*.la
-%{_libdir}/%{name}-0.5/lib*.la
-%{_includedir}/%{name}-0.5
+%{_gstlibdir}/lib*.la
+%{_gstincludedir}
 %{_gtkdocdir}/*
 %{_pkgconfigdir}/*
 
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
-%{_libdir}/%{name}-0.5/lib*.a
+%{_gstlibdir}/lib*.a
