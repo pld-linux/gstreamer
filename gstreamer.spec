@@ -66,7 +66,7 @@ Statyczne wersje bibliotek GStreamer.
 
 %{__make}
 
-%install  
+%install
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} DESTDIR=$RPM_BUILD_ROOT install
@@ -79,7 +79,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/gst-register --gst-mask=0
 
 %postun	-p /sbin/ldconfig
-  
+
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/*
