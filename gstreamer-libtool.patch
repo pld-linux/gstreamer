@@ -1,0 +1,11 @@
+diff -Nuard gstreamer-0.6.4.orig/configure.ac gstreamer-0.6.4/configure.ac
+--- gstreamer-0.6.4.orig/configure.ac	2003-10-13 17:03:13.000000000 +0200
++++ gstreamer-0.6.4/configure.ac	2003-10-15 20:53:53.000000000 +0200
+@@ -24,6 +24,7 @@
+ dnl - interfaces removed -> AGE = 0
+ dnl - major/minor got increased -> reset to 0,0,0
+ AS_LIBTOOL(GST, 1, 0, 1)
++AC_PROG_LIBTOOL
+ 
+ AC_CONFIG_SRCDIR([gst/gst.c])
+ AM_CONFIG_HEADER(config.h)
