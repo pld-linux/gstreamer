@@ -1,27 +1,27 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl):	GStreamer - biblioteki ¶rodowiska do obróbki strumieni
 Name:		gstreamer
-Version:	0.8.3
+Version:	0.8.4
 Release:	1
 License:	LGPL
 Group:		Libraries
 Source0:	http://ftp.gnome.org/pub/gnome/sources/%{name}/0.8/%{name}-%{version}.tar.bz2
-# Source0-md5:	090bdbd35c9b831746694d020356d5b6
+# Source0-md5:	5bf02f686f3bbd787f9dca4331ce8ee2
 Patch0:		%{name}-without_ps_pdf.patch
 URL:		http://gstreamer.net/
-BuildRequires:	autoconf >= 2.50
-BuildRequires:	automake
-BuildRequires:	bison
+BuildRequires:	autoconf >= 2.52
+BuildRequires:	automake >= 1.6
+BuildRequires:	bison >= 1.35
 BuildRequires:	flex
 BuildRequires:	gettext-devel >= 0.14.1
-BuildRequires:	glib2-devel >= 1:2.4.2
+BuildRequires:	glib2-devel >= 1:2.4.4
 BuildRequires:	gtk-doc >= 1.0
 BuildRequires:	intltool
-BuildRequires:	libtool
+BuildRequires:	libtool >= 1.4
 BuildRequires:	libxml2-devel >= 2.4.17
 BuildRequires:	nasm
 BuildRequires:	perl-base
-BuildRequires:	pkgconfig
+BuildRequires:	pkgconfig >= 0.9.0
 BuildRequires:	popt-devel >= 1.6.3
 BuildRequires:	transfig
 BuildRequires:	xmlto
@@ -53,7 +53,7 @@ Summary:	Include files for GStreamer streaming-media framework
 Summary(pl):	Pliki nag³ówkowe do ¶rodowiska obróbki strumieni GStreamer
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	glib2-devel >= 1:2.4.2
+Requires:	glib2-devel >= 1:2.4.4
 Requires:	libxml2-devel >= 2.4.17
 Requires:	popt-devel >= 1.6.3
 
@@ -97,7 +97,6 @@ intltoolize --copy --force
 %else
 	--disable-fast-stack-trash \
 %endif
-	--enable-glib2 \
 	--enable-libmmx \
 	--enable-atomic \
 	--disable-examples \
