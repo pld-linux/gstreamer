@@ -21,6 +21,7 @@ BuildRequires:	nasm
 BuildRequires:	pkgconfig
 BuildRequires:	popt-devel >= 1.6.1
 BuildRequires:	xmlto
+BuildRequires:	transfig
 Requires(post):	/sbin/ldconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
