@@ -1,15 +1,13 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl):	GStreamer - biblioteki ¶rodowiska do obróbki strumieni
 Name:		gstreamer
-Version:	0.7.4
+Version:	0.7.5
 Release:	1
 License:	LGPL
 Group:		Libraries
 Source0:	http://ftp.gnome.org/pub/gnome/sources/%{name}/0.7/%{name}-%{version}.tar.bz2
-# Source0-md5:	121665cc808544604cc5ea2f19c1d454
-#Patch0:		%{name}-libtool.patch
+# Source0-md5:	3ab0771b2756a4f6f3985169aca9dca3
 Patch0:		%{name}-without_ps_pdf.patch
-Patch1:		%{name}-am18.patch
 URL:		http://gstreamer.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -79,7 +77,6 @@ Statyczne wersje bibliotek GStreamer.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
 
 %build
 #intltoolize --copy --force
