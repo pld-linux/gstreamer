@@ -1,37 +1,34 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl):	GStreamer - biblioteki ¶rodowiska do obróbki strumieni
 Name:		gstreamer
-Version:	0.6.4
-Release:	3
+Version:	0.8.0
+Release:	1
 License:	LGPL
 Group:		Libraries
-Source0:	http://ftp.gnome.org/pub/gnome/sources/%{name}/0.6/%{name}-%{version}.tar.bz2
-# Source0-md5:	d607f42d4a6de9e79d74ccaa6469ded6
-Patch0:		%{name}-libtool.patch
-Patch1:		%{name}-without_ps_pdf.patch
-Patch2:		%{name}-doc-destdir.patch
-Patch3:		%{name}-ppc.patch
-Patch4:		%{name}-am18.patch
+Source0:	http://ftp.gnome.org/pub/gnome/sources/%{name}/0.8/%{name}-%{version}.tar.bz2
+# Source0-md5:	275384c4001c6b934f159952f39e2f36
+Patch0:		%{name}-without_ps_pdf.patch
 URL:		http://gstreamer.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	flex
-BuildRequires:	glib2-devel >= 2.0.1
-BuildRequires:	gtk-doc >= 0.7
+BuildRequires:	glib2-devel >= 1:2.4.0
+BuildRequires:	gtk-doc >= 1.0
 BuildRequires:	libtool
 BuildRequires:	libxml2-devel >= 2.4.17
 BuildRequires:	nasm
+BuildRequires:	perl-base
 BuildRequires:	pkgconfig
-BuildRequires:	popt-devel >= 1.6.1
+BuildRequires:	popt-devel >= 1.6.3
 BuildRequires:	transfig
 BuildRequires:	xmlto
 Requires(post):	/sbin/ldconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_gstlibdir	%{_libdir}/gstreamer-0.6
-%define		_gstincludedir	%{_includedir}/gstreamer-0.6
-%define		_gstcachedir	%{_var}/cache/gstreamer-0.6
+%define		_gstlibdir	%{_libdir}/gstreamer-0.8
+%define		_gstincludedir	%{_includedir}/gstreamer-0.8
+%define		_gstcachedir	%{_var}/cache/gstreamer
 
 %description
 GStreamer is a streaming-media framework, based on graphs of filters
@@ -53,10 +50,10 @@ nowych typów danych lub mo¿liwo¶ci obróbki.
 Summary:	Include files for GStreamer streaming-media framework
 Summary(pl):	Pliki nag³ówkowe do ¶rodowiska obróbki strumieni GStreamer
 Group:		Development/Libraries
-Requires:	%{name} = %{version}
-Requires:	glib2-devel >= 2.0.1
+Requires:	%{name} = %{version}-%{release}
+Requires:	glib2-devel >= 1:2.4.0
 Requires:	libxml2-devel >= 2.4.17
-Requires:	popt-devel >= 1.6.1
+Requires:	popt-devel >= 1.6.3
 
 %description devel
 This package contains the includes files necessary to develop
@@ -70,7 +67,7 @@ i wtyczek do GStreamera.
 Summary:	GStreamer static libraries
 Summary(pl):	Biblioteki statyczne GStreamer
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}
+Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static versions of GStreamer libraries.
@@ -81,20 +78,18 @@ Statyczne wersje bibliotek GStreamer.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
 
 %build
+#intltoolize --copy --force
+#%%{__gettextize}
 %{__libtoolize}
 %{__aclocal} -I common/m4
 %{__autoconf}
 %{__autoheader}
 %{__automake}
-cp -f /usr/share/automake/config.sub libs/ext/cothreads/
 
 %configure \
+	--program-suffix="" \
 %ifarch i586 i686 athlon
 	--enable-fast-stack-trash \
 %else
@@ -115,13 +110,17 @@ cp -f /usr/share/automake/config.sub libs/ext/cothreads/
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT{%{_gstcachedir},%{_docdir}/%{name}-devel-%{version}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-
-install -d $RPM_BUILD_ROOT%{_gstcachedir}
 touch $RPM_BUILD_ROOT%{_gstcachedir}/registry.xml
+
+mv $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/{manual,pwg} \
+	$RPM_BUILD_ROOT%{_docdir}/%{name}-devel-%{version}
+
+%find_lang %{name} --all-name --with-gnome
 
 # no static modules and *.la for them - shut up check files
 rm -f $RPM_BUILD_ROOT%{_gstlibdir}/lib*.{la,a}
@@ -131,13 +130,15 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/ldconfig
-%{_bindir}/gst-register --gst-mask=0
+# how to do it ????
+%{_bindir}/gst-register --gst-registry=%{_gstcachedir}/registry.xml
+#%%{_bindir}/gst-register --gst-mask=0
 
 %postun	-p /sbin/ldconfig
 
-%files
+%files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc AUTHORS README RELEASE NEWS TODO ChangeLog
+%doc AUTHORS ChangeLog NEWS README TODO
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*.*
 %dir %{_gstlibdir}
@@ -148,6 +149,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
+%doc DEVEL
 %attr(755,root,root) %{_libdir}/lib*.so
 %{_libdir}/lib*.la
 %{_gstincludedir}
