@@ -1,0 +1,17 @@
+--- gstreamer-0.6.4/gst/gstarch.h.orig	2003-09-23 00:12:34.000000000 +0000
++++ gstreamer-0.6.4/gst/gstarch.h	2003-11-10 01:31:50.000000000 +0000
+@@ -46,11 +46,11 @@
+ #elif defined (HAVE_CPU_PPC) && defined(__GNUC__)
+ 
+ #define GST_ARCH_SET_SP(stackpointer) \
+-    __asm__("lwz r1,%0" : : "m"(stackpointer) )
++    __asm__("lwz 1,%0" : : "m"(stackpointer) )
+   
+ #define GST_ARCH_CALL(target) \
+-    __asm__( "mr r0,%0\n\t" \
+-             "mtlr r0\n\t" \
++    __asm__( "mr 0,%0\n\t" \
++             "mtlr 0\n\t" \
+              "blrl" : : "r"(target) : "r0" );
+   
+ struct minimal_ppc_stackframe {
