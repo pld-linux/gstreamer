@@ -1,13 +1,13 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl):	GStreamer - biblioteki ¶rodowiska do obróbki strumieni
 Name:		gstreamer
-Version:	0.4.1
+Version:	0.4.2
 Release:	1
 License:	LGPL
 Group:		Libraries
 Source0:	http://prdownloads.sourceforge.net/gstreamer/%{name}-%{version}.tar.bz2
 URL:		http://gstreamer.net/
-BuildRequires:	glib2-devel >= 2.0.0
+BuildRequires:	glib2-devel >= 2.0.1
 BuildRequires:	libxml2-devel >= 2.4.17
 BuildRequires:	nasm
 BuildRequires:	pkgconfig
