@@ -9,36 +9,42 @@ Group(es):	Bibliotecas
 Group(fr):	Librairies
 Group(pl):	Biblioteki
 Source0:	http://download.sourceforge.net/gstreamer/%{name}-%{version}.tar.bz2
+#Patch0:	%{name}-buffer.patch
 URL:		http://gstreamer.net
 BuildRequires:	gtk+-devel
 BuildRequires:	libxml-devel
 BuildRequires:	arts-devel
-BuildRequires:	xmms-devel
 BuildRequires:	gdk-pixbuf-devel
-BuildRequires:	alsa-lib-devel
 BuildRequires:	audiofile-devel
 BuildRequires:	esound-devel
-BuildRequires:	libglade-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libvorbis-devel
 BuildRequires:	libghttp-devel
 BuildRequires:	Hermes-devel
-BuildRequires:	avifile-devel
 BuildRequires:	libraw1394-devel
 BuildRequires:	gnome-libs-devel
-BuildRequires:	gnome-vfs-devel
 BuildRequires:	mpeg2dec-devel
 BuildRequires:	libshout-devel
 BuildRequires:	libgsm-devel
 BuildRequires:	cdparanoia-III-devel
-BuildRequires:	lame-libs-devel
 BuildRequires:	libdv-devel
 BuildRequires:	aalib-devel
-#BuildRequires:	quicktime4linux-devel
-BuildRequires:	SDL-devel
-BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+BuildRequires:	quicktime4linux-devel
+BuildRequires:	mad-devel
+BuildRequires:	nasm
 
-%define		_prefix		/usr/X11R6
+# it should compile with, but it is not possible
+# without patching... I think...
+# check also configure switches below...
+#BuildRequires:	lame-libs-devel
+#BuildRequires:	avifile-devel
+#BuildRequires:	xmms-devel
+#BuildRequires:	alsa-lib-devel
+#BuildRequires:	SDL-devel
+#BuildRequires:	gnome-vfs-devel
+#BuildRequires:	libglade-devel
+
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 GStreamer is a streaming-media framework, based on graphs of filters
@@ -69,23 +75,23 @@ develop applications and plugins for GStreamer.
 
 %prep
 %setup -q
+#%patch0 -p1
 
 %build
-rm missing
-#LDFLAGS="-L/usr/X11R6/lib"
-#autoconf
+LDFLAGS="-L/usr/X11R6/lib"
+export LDFLAGS
 %configure \
 	--prefix=%{_prefix} \
 	--enable-libmmx \
 	--enable-libghttp \
 	--enable-gdk_pixbuf \
 	--enable-libaudiofile \
-	--enable-alsa \
-	--enable-libxmms \
 	--enable-libesd \
 	--enable-arts \
-	--disable-atomic \
+	--enable-atomic \
 	--enable-autoplug
+#	--enable-alsa \
+#	--enable-libxmms \
 
 %{__make}
 
@@ -93,7 +99,7 @@ rm missing
 rm -rf $RPM_BUILD_ROOT
 [ -n "$RPM_BUILD_ROOT" -a "$RPM_BUILD_ROOT" != / ] && rm -rf $RPM_BUILD_ROOT
 
-%{__make} prefix=$RPM_BUILD_ROOT%{_prefix} install
+%{__make} DESTDIR=$RPM_BUILD_ROOT install
 
 %clean
 [ -n "$RPM_BUILD_ROOT" -a "$RPM_BUILD_ROOT" != / ] && rm -rf $RPM_BUILD_ROOT
