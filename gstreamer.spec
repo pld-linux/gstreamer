@@ -24,10 +24,21 @@ BuildRequires:	libvorbis-devel
 BuildRequires:	libghttp-devel
 BuildRequires:	Hermes-devel
 BuildRequires:	avifile-devel
-BuildRequires:	gnome-libs-devel
 BuildRequires:	libraw1394-devel
+BuildRequires:	gnome-libs-devel
+BuildRequires:	gnome-vfs-devel
 BuildRequires:	mpeg2dec-devel
+BuildRequires:	libshout-devel
+BuildRequires:	libgsm-devel
+BuildRequires:	cdparanoia-III-devel
+BuildRequires:	lame-libs-devel
+BuildRequires:	libdv-devel
+BuildRequires:	aalib-devel
+#BuildRequires:	quicktime4linux-devel
+BuildRequires:	SDL-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define		_prefix		/usr/X11R6
 
 %description
 GStreamer is a streaming-media framework, based on graphs of filters
@@ -60,7 +71,11 @@ develop applications and plugins for GStreamer.
 %setup -q
 
 %build
+rm missing
+#LDFLAGS="-L/usr/X11R6/lib"
+#autoconf
 %configure \
+	--prefix=%{_prefix} \
 	--enable-libmmx \
 	--enable-libghttp \
 	--enable-gdk_pixbuf \
@@ -69,7 +84,7 @@ develop applications and plugins for GStreamer.
 	--enable-libxmms \
 	--enable-libesd \
 	--enable-arts \
-	--enable-atomic \
+	--disable-atomic \
 	--enable-autoplug
 
 %{__make}
