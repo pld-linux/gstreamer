@@ -118,7 +118,7 @@ touch $RPM_BUILD_ROOT%{_gstcachedir}/registry.xml
 rm -f $RPM_BUILD_ROOT%{_gstlibdir}/lib*.{la,a}
 
 %clean
-#rm -rf $RPM_BUILD_ROOT
+rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/ldconfig
