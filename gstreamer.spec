@@ -46,6 +46,9 @@ Summary:	Include files for GStreamer streaming-media framework
 Summary(pl):	Pliki nag³ówkowe do ¶rodowiska obróbki strumieni GStreamer
 Group:		Development/Libraries
 Requires:	%{name} = %{version}
+Requires:	glib2-devel >= 2.0.1
+Requires:	libxml2-devel >= 2.4.17
+Requires:	popt-devel >= 1.6.1
 
 %description devel
 This package contains the includes files necessary to develop
