@@ -2,7 +2,7 @@ Summary:	GStreamer Streaming-media framework runtime
 Summary(pl):	GStreamer - biblioteki ¶rodowiska do obróbki strumieni
 Name:		gstreamer
 Version:	0.6.1
-Release:	1
+Release:	2
 License:	LGPL
 Group:		Libraries
 Source0:	http://ftp.gnome.org/pub/gnome/sources/%{name}/0.6/%{name}-%{version}.tar.bz2
@@ -85,6 +85,9 @@ rm -rf $RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_gstcachedir}
 
+# no static modules and *.la for them - shut up check files
+rm -f $RPM_BUILD_ROOT%{_gstlibdir}/lib*.{la,a}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -97,7 +100,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/*
-%attr(755,root,root) %{_libdir}/lib*.so.*
+%attr(755,root,root) %{_libdir}/lib*.so.*.*.*
 %dir %{_gstlibdir}
 %attr(755,root,root) %{_gstlibdir}/*.so
 %dir %{_gstcachedir}
@@ -107,7 +110,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/lib*.so
 %{_libdir}/lib*.la
-%{_gstlibdir}/lib*.la
 %{_gstincludedir}
 %{_gtkdocdir}/*
 %{_pkgconfigdir}/*
@@ -116,4 +118,3 @@ rm -rf $RPM_BUILD_ROOT
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
-%{_gstlibdir}/lib*.a
