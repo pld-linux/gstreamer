@@ -1,7 +1,7 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl):	GStreamer - biblioteki ¶rodowiska do obróbki strumieni
 Name:		gstreamer
-Version:	0.6.0
+Version:	0.6.1
 Release:	1
 License:	LGPL
 Group:		Libraries
@@ -11,6 +11,7 @@ BuildRequires:	glib2-devel >= 2.0.1
 BuildRequires:	libxml2-devel >= 2.4.17
 BuildRequires:	nasm
 BuildRequires:	pkgconfig
+BuildRequires:	popt-devel >= 1.6.1
 Requires(post):	/sbin/ldconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -110,6 +111,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_gstincludedir}
 %{_gtkdocdir}/*
 %{_pkgconfigdir}/*
+%{_aclocaldir}/*
 
 %files static
 %defattr(644,root,root,755)
