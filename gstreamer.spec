@@ -1,23 +1,26 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl):	GStreamer - biblioteki ¶rodowiska do obróbki strumieni
 Name:		gstreamer
-Version:	0.6.3
+Version:	0.6.4
 Release:	1
 License:	LGPL
 Group:		Libraries
 Source0:	http://ftp.gnome.org/pub/gnome/sources/%{name}/0.6/%{name}-%{version}.tar.bz2
-# Source0-md5:	f9e9401c709074dc7bd600b0f3baab37
-Patch0:		%{name}-Werror.patch
+# Source0-md5:	d607f42d4a6de9e79d74ccaa6469ded6
+Patch0:		%{name}-libtool.patch
+Patch1:		%{name}-without_ps_pdf.patch
+Patch2:		%{name}-doc-destdir.patch
 URL:		http://gstreamer.net/
 BuildRequires:	autoconf
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	glib2-devel >= 2.0.1
-BuildRequires:	gtk-doc
+BuildRequires:	gtk-doc >= 0.7
 BuildRequires:	libxml2-devel >= 2.4.17
 BuildRequires:	nasm
 BuildRequires:	pkgconfig
 BuildRequires:	popt-devel >= 1.6.1
+BuildRequires:	xmlto
 Requires(post):	/sbin/ldconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -73,18 +76,32 @@ Statyczne wersje bibliotek GStreamer.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
+%patch2 -p1
 
 %build
+rm -f missing
+%{__aclocal} -I common/m4
+%{__libtoolize}
 %{__autoconf}
+%{__autoheader}
+%{__automake}
 %configure \
+%ifarch i586 i686 athlon
+	--enable-fast-stack-trash \
+%endif
 	--enable-glib2 \
 	--enable-libmmx \
 	--enable-atomic \
 	--disable-examples \
 	--disable-tests \
+	--disable-debug \
+	--disable-DEBUG \
+	--disable-debug-color \
 	--enable-docs-build \
-	--with-html-dir=%{_gtkdocdir}
-
+	--with-html-dir=%{_gtkdocdir} \
+	--with-cachedir=%{_gstcachedir}
+	
 %{__make}
 
 %install
@@ -93,6 +110,7 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+
 install -d $RPM_BUILD_ROOT%{_gstcachedir}
 touch $RPM_BUILD_ROOT%{_gstcachedir}/registry.xml
 
@@ -100,7 +118,7 @@ touch $RPM_BUILD_ROOT%{_gstcachedir}/registry.xml
 rm -f $RPM_BUILD_ROOT%{_gstlibdir}/lib*.{la,a}
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+#rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/ldconfig
@@ -110,6 +128,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
+%doc AUTHORS README RELEASE NEWS TODO ChangeLog
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*.*
 %dir %{_gstlibdir}
