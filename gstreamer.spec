@@ -1,48 +1,53 @@
 Summary:	GStreamer Streaming-media framework runtime
 Name:		gstreamer
-Version:	0.2.1
-Release:	2
+Version:	0.2.2
+Release:	0.20011125.1
 License:	LGPL
 Group:		Libraries
 Group(de):	Libraries
 Group(es):	Bibliotecas
 Group(fr):	Librairies
 Group(pl):	Biblioteki
-Source0:	http://download.sourceforge.net/gstreamer/%{name}-%{version}.tar.bz2
-#Patch0:	%{name}-buffer.patch
+Source0:	http://download.sourceforge.net/gstreamer/%{name}.tar.bz2
+#Source0:	http://download.sourceforge.net/gstreamer/%{name}-%{version}.tar.bz2
+Patch0:		%{name}-size_t.patch
 URL:		http://gstreamer.net
-BuildRequires:	gtk+-devel
-BuildRequires:	libxml-devel
-BuildRequires:	arts-devel
-BuildRequires:	gdk-pixbuf-devel
-BuildRequires:	audiofile-devel
-BuildRequires:	esound-devel
-BuildRequires:	libjpeg-devel
-BuildRequires:	libvorbis-devel
-BuildRequires:	libghttp-devel
-BuildRequires:	Hermes-devel
-BuildRequires:	libraw1394-devel
-BuildRequires:	gnome-libs-devel
-BuildRequires:	mpeg2dec-devel
-BuildRequires:	libshout-devel
-BuildRequires:	libgsm-devel
-BuildRequires:	cdparanoia-III-devel
-BuildRequires:	libdv-devel
-BuildRequires:	aalib-devel
-BuildRequires:	quicktime4linux-devel
-BuildRequires:	mad-devel
 BuildRequires:	nasm
+BuildRequires:	pkgconfig
+BuildRequires:	GConf-devel
+BuildRequires:	Hermes-devel
+BuildRequires:	SDL-devel
+BuildRequires:	aalib-devel
+BuildRequires:	alsa-lib-devel
+BuildRequires:	arts-devel
+BuildRequires:	audiofile-devel
+BuildRequires:	avifile-devel
+BuildRequires:	cdparanoia-III-devel
+BuildRequires:	esound-devel
+BuildRequires:	gdk-pixbuf-devel
+BuildRequires:	gnome-libs-devel
+BuildRequires:	gnome-vfs-devel
+BuildRequires:	gtk+-devel
+BuildRequires:	lame-libs-devel
+BuildRequires:	libdv-devel
+BuildRequires:	libdvdread-devel
+BuildRequires:	libghttp-devel
+BuildRequires:	libglade-devel
+BuildRequires:	libgsm-devel
+BuildRequires:	libjpeg-devel
+BuildRequires:	libmikmod-devel
+BuildRequires:	libraw1394-devel
+BuildRequires:	libvorbis-devel
+BuildRequires:	libxml-devel
+BuildRequires:	mad-devel
+BuildRequires:	mpeg2dec-devel
+BuildRequires:	quicktime4linux-devel
+BuildRequires:	xmms-devel
 
-# it should compile with, but it is not possible
-# without patching... I think...
-# check also configure switches below...
-#BuildRequires:	lame-libs-devel
-#BuildRequires:	avifile-devel
-#BuildRequires:	xmms-devel
-#BuildRequires:	alsa-lib-devel
-#BuildRequires:	SDL-devel
-#BuildRequires:	gnome-vfs-devel
-#BuildRequires:	libglade-devel
+# libshout 1.0.5 is out of date...
+# http://cvs.icecast.org/cvsweb.cgi/
+# module shout
+#BuildRequires:	libshout-devel
 
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -74,24 +79,27 @@ This package contains the libraries and includes files necessary to
 develop applications and plugins for GStreamer.
 
 %prep
-%setup -q
-#%patch0 -p1
+%setup -q -n %{name}
+%patch0 -p1
 
 %build
-LDFLAGS="-L/usr/X11R6/lib"
-export LDFLAGS
+rm -f missing
+./makeconfigure < configure.base > configure.in configure.in
+libtoolize --force --copy
+aclocal
+automake --add-missing
+autoconf
 %configure \
-	--prefix=%{_prefix} \
 	--enable-libmmx \
 	--enable-libghttp \
+	--enable-alsa \
+	--enable-libxmms \
 	--enable-gdk_pixbuf \
 	--enable-libaudiofile \
 	--enable-libesd \
 	--enable-arts \
 	--enable-atomic \
 	--enable-autoplug
-#	--enable-alsa \
-#	--enable-libxmms \
 
 %{__make}
 
