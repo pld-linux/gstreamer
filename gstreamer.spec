@@ -2,7 +2,7 @@ Summary:	GStreamer Streaming-media framework runtime
 Summary(pl):	GStreamer - biblioteki ¶rodowiska do obróbki strumieni
 Name:		gstreamer
 Version:	0.6.2
-Release:	1
+Release:	2
 License:	LGPL
 Group:		Libraries
 Source0:	http://ftp.gnome.org/pub/gnome/sources/%{name}/0.6/%{name}-%{version}.tar.bz2
@@ -89,6 +89,7 @@ rm -rf $RPM_BUILD_ROOT
 	DESTDIR=$RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_gstcachedir}
+touch $RPM_BUILD_ROOT%{_gstcachedir}/registry.xml
 
 # no static modules and *.la for them - shut up check files
 rm -f $RPM_BUILD_ROOT%{_gstlibdir}/lib*.{la,a}
@@ -109,6 +110,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_gstlibdir}
 %attr(755,root,root) %{_gstlibdir}/*.so
 %dir %{_gstcachedir}
+%ghost %{_gstcachedir}/registry.xml
 %{_mandir}/man1/*
 
 %files devel
