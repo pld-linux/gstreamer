@@ -42,7 +42,7 @@ installing new plugins.
 GStreamer to ¶rodowisko obróbki danych strumieniowych, bazuj±ce na
 grafie filtrów operuj±cych na danych medialnych. Aplikacje u¿ywaj±ce
 tej biblioteki mog± robiæ wszystko od przetwarzania d¼wiêku w czasie
-rzeczywistym, do odtwarzania filmów i czegokolwiek innego zwi±zego z
+rzeczywistym, do odtwarzania filmów i czegokolwiek innego zwi±zanego z
 mediami. Architektura bazuj±ca na wtyczkach pozwala na ³atwe dodawanie
 nowych typów danych lub mo¿liwo¶ci obróbki.
 
