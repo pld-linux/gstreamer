@@ -1,0 +1,11 @@
+diff -Nuard gstreamer-0.7.1.orig/configure.ac gstreamer-0.7.1/configure.ac
+--- gstreamer-0.7.1.orig/configure.ac	2003-10-20 20:46:39.000000000 +0200
++++ gstreamer-0.7.1/configure.ac	2003-10-21 20:03:51.000000000 +0200
+@@ -617,6 +617,7 @@
+ docs/plugins/Makefile
+ docs/plugins/gstreamer-plugins.types
+ docs/xsl/Makefile
++docs/version.entities
+ pkgconfig/Makefile
+ stamp.h
+ pkgconfig/gstreamer.pc
