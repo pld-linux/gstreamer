@@ -6,6 +6,7 @@ Release:	2
 License:	LGPL
 Group:		Libraries
 Source0:	http://ftp.gnome.org/pub/gnome/sources/%{name}/0.6/%{name}-%{version}.tar.bz2
+# Source0-md5: e9db8443c7679978b72d485c744f3189
 URL:		http://gstreamer.net/
 BuildRequires:	glib2-devel >= 2.0.1
 BuildRequires:	libxml2-devel >= 2.4.17
