@@ -12,16 +12,18 @@ Patch1:		%{name}-without_ps_pdf.patch
 Patch2:		%{name}-doc-destdir.patch
 URL:		http://gstreamer.net/
 BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	glib2-devel >= 2.0.1
 BuildRequires:	gtk-doc >= 0.7
+BuildRequires:	libtool
 BuildRequires:	libxml2-devel >= 2.4.17
 BuildRequires:	nasm
 BuildRequires:	pkgconfig
 BuildRequires:	popt-devel >= 1.6.1
-BuildRequires:	xmlto
 BuildRequires:	transfig
+BuildRequires:	xmlto
 Requires(post):	/sbin/ldconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -81,15 +83,16 @@ Statyczne wersje bibliotek GStreamer.
 %patch2 -p1
 
 %build
-rm -f missing
-%{__aclocal} -I common/m4
 %{__libtoolize}
+%{__aclocal} -I common/m4
 %{__autoconf}
 %{__autoheader}
 %{__automake}
 %configure \
 %ifarch i586 i686 athlon
 	--enable-fast-stack-trash \
+%else
+	--disable-fast-stack-trash \
 %endif
 	--enable-glib2 \
 	--enable-libmmx \
