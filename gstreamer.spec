@@ -60,6 +60,7 @@ Statyczne wersje bibliotek GStreamer.
 %setup -q
 
 %build
+%{__autoconf}
 %configure \
 	--enable-glib2 \
 	--enable-libmmx \
