@@ -1,6 +1,6 @@
 Summary:	GStreamer Streaming-media framework runtime
 Name:		gstreamer
-Version:	0.1.1
+Version:	0.2.1
 Release:	1
 License:	LGPL
 Group:		Libraries
@@ -8,7 +8,25 @@ Group(de):	Libraries
 Group(es):	Bibliotecas
 Group(fr):	Librairies
 Group(pl):	Biblioteki
-Source0:	%{name}-%{version}.tar.gz
+Source0:	http://download.sourceforge.net/gstreamer/%{name}-%{version}.tar.bz2
+URL:		http://gstreamer.net
+BuildRequires:	gtk+-devel
+BuildRequires:	libxml-devel
+BuildRequires:	arts-devel
+BuildRequires:	xmms-devel
+BuildRequires:	gdk-pixbuf-devel
+BuildRequires:	alsa-lib-devel
+BuildRequires:	audiofile-devel
+BuildRequires:	esound-devel
+BuildRequires:	libglade-devel
+BuildRequires:	libjpeg-devel
+BuildRequires:	libvorbis-devel
+BuildRequires:	libghttp-devel
+BuildRequires:	Hermes-devel
+BuildRequires:	avifile-devel
+BuildRequires:	gnome-libs-devel
+BuildRequires:	libraw1394-devel
+BuildRequires:	mpeg2dec-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -42,7 +60,17 @@ develop applications and plugins for GStreamer.
 %setup -q
 
 %build
-%configure2_13
+%configure \
+	--enable-libmmx \
+	--enable-libghttp \
+	--enable-gdk_pixbuf \
+	--enable-libaudiofile \
+	--enable-alsa \
+	--enable-libxmms \
+	--enable-libesd \
+	--enable-arts \
+	--enable-atomic \
+	--enable-autoplug
 
 %{__make}
 
