@@ -13,11 +13,12 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	flex
-BuildRequires:	glib2-devel >= 2.2.0
-BuildRequires:	gtk-doc >= 0.7
+BuildRequires:	glib2-devel >= 2.3.0
+BuildRequires:	gtk-doc >= 1.0
 BuildRequires:	libtool
 BuildRequires:	libxml2-devel >= 2.4.17
 BuildRequires:	nasm
+BuildRequires:	perl-base
 BuildRequires:	pkgconfig
 BuildRequires:	popt-devel >= 1.6.3
 BuildRequires:	transfig
@@ -49,8 +50,8 @@ nowych typów danych lub mo¿liwo¶ci obróbki.
 Summary:	Include files for GStreamer streaming-media framework
 Summary(pl):	Pliki nag³ówkowe do ¶rodowiska obróbki strumieni GStreamer
 Group:		Development/Libraries
-Requires:	%{name} = %{version}
-Requires:	glib2-devel >= 2.2.0
+Requires:	%{name} = %{version}-%{release}
+Requires:	glib2-devel >= 2.3.0
 Requires:	libxml2-devel >= 2.4.17
 Requires:	popt-devel >= 1.6.3
 
@@ -66,7 +67,7 @@ i wtyczek do GStreamera.
 Summary:	GStreamer static libraries
 Summary(pl):	Biblioteki statyczne GStreamer
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}
+Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static versions of GStreamer libraries.
