@@ -136,8 +136,9 @@ rm -rf $RPM_BUILD_ROOT
 %postun	-p /sbin/ldconfig
 
 %files -f %{name}.lang
-%doc AUTHORS ChangeLog NEWS README TODO
 %defattr(644,root,root,755)
+%doc AUTHORS ChangeLog NEWS README TODO
+# XXX: conflict, will be removed by above %doc
 %doc %{_docdir}/%{name}-%{version}
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*.*
@@ -148,8 +149,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/*
 
 %files devel
-%doc DEVEL
 %defattr(644,root,root,755)
+%doc DEVEL
+# XXX: conflict, will be removed by above %doc
 %doc %{_docdir}/%{name}-devel-%{version}
 %attr(755,root,root) %{_libdir}/lib*.so
 %{_libdir}/lib*.la
