@@ -10,6 +10,7 @@ Source0:	http://ftp.gnome.org/pub/gnome/sources/%{name}/0.6/%{name}-%{version}.t
 Patch0:		%{name}-libtool.patch
 Patch1:		%{name}-without_ps_pdf.patch
 Patch2:		%{name}-doc-destdir.patch
+Patch3:		%{name}-ppc.patch
 URL:		http://gstreamer.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -81,6 +82,7 @@ Statyczne wersje bibliotek GStreamer.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch -p1
 
 %build
 %{__libtoolize}
