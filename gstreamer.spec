@@ -1,11 +1,11 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl):	GStreamer - biblioteki ¶rodowiska do obróbki strumieni
 Name:		gstreamer
-Version:	0.4.2
+Version:	0.5.0
 Release:	1
 License:	LGPL
 Group:		Libraries
-Source0:	http://prdownloads.sourceforge.net/gstreamer/%{name}-%{version}.tar.bz2
+Source0:	http://ftp.gnome.org/pub/gnome/sources/%{name}/0.5/%{name}-%{version}.tar.bz2
 URL:		http://gstreamer.net/
 BuildRequires:	glib2-devel >= 2.0.1
 BuildRequires:	libxml2-devel >= 2.4.17
@@ -64,14 +64,20 @@ Statyczne wersje bibliotek GStreamer.
 %configure \
 	--enable-glib2 \
 	--enable-libmmx \
-	--enable-atomic
+	--enable-atomic \
+	--disable-examples \
+	--disable-tests \
+	--enable-docs-build \
+	--with-html-dir=%{_gtkdocdir}
 
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} DESTDIR=$RPM_BUILD_ROOT install
+%{__make} install \
+    DESTDIR=$RPM_BUILD_ROOT \
+    
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -86,19 +92,18 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*
-%dir %{_libdir}/gst
-%attr(755,root,root) %{_libdir}/gst/*.so*
-%{_libdir}/gst/*.la
+%attr(755,root,root) %{_libdir}/%{name}-0.5/*.so*
 %{_mandir}/man1/*
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/lib*.so
 %{_libdir}/lib*.la
-%{_includedir}/%{name}-%{version}
+%{_libdir}/%{name}-0.5/lib*.la
+%{_includedir}/%{name}-0.5
+%{_gtkdocdir}/*
 %{_pkgconfigdir}/*
 
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
-%{_libdir}/gst/lib*.a
+%{_libdir}/%{name}-0.5/lib*.a
