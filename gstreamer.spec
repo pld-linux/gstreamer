@@ -1,28 +1,27 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl):	GStreamer - biblioteki ¶rodowiska do obróbki strumieni
 Name:		gstreamer
-Version:	0.7.3
-Release:	0.1
+Version:	0.7.4
+Release:	1
 License:	LGPL
 Group:		Libraries
 Source0:	http://ftp.gnome.org/pub/gnome/sources/%{name}/0.7/%{name}-%{version}.tar.bz2
-# Source0-md5:	6512fd27235657e5c5ea37f47e05f9a3
+# Source0-md5:	121665cc808544604cc5ea2f19c1d454
 #Patch0:		%{name}-libtool.patch
 Patch0:		%{name}-without_ps_pdf.patch
-Patch1:		%{name}-doc-destdir.patch
-Patch2:		%{name}-am18.patch
+Patch1:		%{name}-am18.patch
 URL:		http://gstreamer.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	flex
-BuildRequires:	glib2-devel >= 2.0.1
+BuildRequires:	glib2-devel >= 2.2.0
 BuildRequires:	gtk-doc >= 0.7
 BuildRequires:	libtool
 BuildRequires:	libxml2-devel >= 2.4.17
 BuildRequires:	nasm
 BuildRequires:	pkgconfig
-BuildRequires:	popt-devel >= 1.6.1
+BuildRequires:	popt-devel >= 1.6.3
 BuildRequires:	transfig
 BuildRequires:	xmlto
 Requires(post):	/sbin/ldconfig
@@ -53,9 +52,9 @@ Summary:	Include files for GStreamer streaming-media framework
 Summary(pl):	Pliki nag³ówkowe do ¶rodowiska obróbki strumieni GStreamer
 Group:		Development/Libraries
 Requires:	%{name} = %{version}
-Requires:	glib2-devel >= 2.0.1
+Requires:	glib2-devel >= 2.2.0
 Requires:	libxml2-devel >= 2.4.17
-Requires:	popt-devel >= 1.6.1
+Requires:	popt-devel >= 1.6.3
 
 %description devel
 This package contains the includes files necessary to develop
@@ -81,7 +80,6 @@ Statyczne wersje bibliotek GStreamer.
 %setup -q
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
 
 %build
 #intltoolize --copy --force
@@ -113,13 +111,20 @@ Statyczne wersje bibliotek GStreamer.
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT{%{_gstcachedir},%{_docdir}/%{name}-devel-%{version}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-
-install -d $RPM_BUILD_ROOT%{_gstcachedir}
 touch $RPM_BUILD_ROOT%{_gstcachedir}/registry.xml
+
+gzip -9nf AUTHORS ChangeLog DEVEL NEWS README TODO
+install AUTHORS.gz ChangeLog.gz NEWS.gz README.gz TODO.gz \
+	$RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}
+install DEVEL.gz $RPM_BUILD_ROOT%{_docdir}/%{name}-devel-%{version}
+
+mv $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/{manual,pwg} \
+	$RPM_BUILD_ROOT%{_docdir}/%{name}-devel-%{version}
 
 %find_lang %{name} --all-name --with-gnome
 
@@ -139,7 +144,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc AUTHORS README RELEASE NEWS TODO ChangeLog
+%doc %{_docdir}/%{name}-%{version}
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*.*
 %dir %{_gstlibdir}
@@ -150,6 +155,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
+%doc %{_docdir}/%{name}-devel-%{version}
 %attr(755,root,root) %{_libdir}/lib*.so
 %{_libdir}/lib*.la
 %{_gstincludedir}
