@@ -1,7 +1,7 @@
 Summary:	GStreamer Streaming-media framework runtime
 Name:		gstreamer
 Version:	0.2.1
-Release:	1
+Release:	2
 License:	LGPL
 Group:		Libraries
 Group(de):	Libraries
@@ -54,7 +54,7 @@ Group:		Development/Libraries
 Group(de):	Entwicklung/Libraries
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
-Requires:	%{name}
+Requires:	%{name} = %{version}
 
 %description devel
 GStreamer is a streaming-media framework, based on graphs of filters
