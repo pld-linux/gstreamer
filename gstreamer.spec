@@ -14,8 +14,9 @@ BuildRequires:	pkgconfig
 Requires(post):	/sbin/ldconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_gstlibdir			%{_libdir}/gstreamer-0.6
+%define		_gstlibdir	%{_libdir}/gstreamer-0.6
 %define		_gstincludedir	%{_includedir}/gstreamer-0.6
+%define		_gstcachedir	%{_var}/cache/gstreamer-0.6
 
 %description
 GStreamer is a streaming-media framework, based on graphs of filters
@@ -79,8 +80,10 @@ Statyczne wersje bibliotek GStreamer.
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
-    DESTDIR=$RPM_BUILD_ROOT \
-    
+	DESTDIR=$RPM_BUILD_ROOT
+
+install -d $RPM_BUILD_ROOT%{_gstcachedir}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -94,7 +97,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*
+%dir %{_gstlibdir}
 %attr(755,root,root) %{_gstlibdir}/*.so
+%dir %{_gstcachedir}
 %{_mandir}/man1/*
 
 %files devel
