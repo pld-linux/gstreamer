@@ -1,8 +1,8 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl):	GStreamer - biblioteki ∂rodowiska do obrÛbki strumieni
 Name:		gstreamer
-Version:	0.2.2
-Release:	0.20011125.1
+Version:	0.3.1
+Release:	1
 License:	LGPL
 Group:		Libraries
 Group(de):	Libraries
@@ -12,47 +12,12 @@ Group(pl):	Biblioteki
 Group(pt_BR):	Bibliotecas
 Group(ru):	‚…¬Ã…œ‘≈À…
 Group(uk):	‚¶¬Ã¶œ‘≈À…
-Source0:	http://download.sourceforge.net/gstreamer/%{name}.tar.bz2
-#Source0:	http://download.sourceforge.net/gstreamer/%{name}-%{version}.tar.bz2
-Patch0:		%{name}-size_t.patch
+Source0:	http://download.sourceforge.net/gstreamer/%{name}-%{version}.tar.bz2
 URL:		http://gstreamer.net/
+BuildRequires:	glib2-devel
+BuildRequires:	libxml2-devel
 BuildRequires:	nasm
 BuildRequires:	pkgconfig
-BuildRequires:	GConf-devel
-BuildRequires:	Hermes-devel
-BuildRequires:	SDL-devel
-BuildRequires:	aalib-devel
-BuildRequires:	alsa-lib-devel
-BuildRequires:	arts-devel
-BuildRequires:	audiofile-devel
-BuildRequires:	avifile-devel
-BuildRequires:	cdparanoia-III-devel
-BuildRequires:	esound-devel
-BuildRequires:	gdk-pixbuf-devel
-BuildRequires:	gnome-libs-devel
-BuildRequires:	gnome-vfs-devel
-BuildRequires:	gtk+-devel
-BuildRequires:	lame-libs-devel
-BuildRequires:	libdv-devel
-BuildRequires:	libdvdread-devel
-BuildRequires:	libghttp-devel
-BuildRequires:	libglade-devel
-BuildRequires:	libgsm-devel
-BuildRequires:	libjpeg-devel
-BuildRequires:	libmikmod-devel
-BuildRequires:	libraw1394-devel
-BuildRequires:	libvorbis-devel
-BuildRequires:	libxml-devel
-BuildRequires:	mad-devel
-BuildRequires:	mpeg2dec-devel
-BuildRequires:	quicktime4linux-devel
-BuildRequires:	xmms-devel
-
-# libshout 1.0.5 is out of date...
-# http://cvs.icecast.org/cvsweb.cgi/
-# module shout
-#BuildRequires:	libshout-devel
-
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -112,27 +77,13 @@ Static versions of GStreamer libraries.
 Statyczne wersje bibliotek GStreamer.
 
 %prep
-%setup -q -n %{name}
-%patch0 -p1
+%setup -q
 
 %build
-rm -f missing
-./makeconfigure < configure.base > configure.in configure.in
-libtoolize --force --copy
-aclocal
-automake --add-missing
-autoconf
 %configure \
+	--enable-glib2 \
 	--enable-libmmx \
-	--enable-libghttp \
-	--enable-alsa \
-	--enable-libxmms \
-	--enable-gdk_pixbuf \
-	--enable-libaudiofile \
-	--enable-libesd \
-	--enable-arts \
-	--enable-atomic \
-	--enable-autoplug
+	--enable-atomic
 
 %{__make}
 
@@ -146,22 +97,25 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/ldconfig
-%{_bindir}/gstreamer-register
+%{_bindir}/gst-register --gst-mask=0
 
 %postun	-p /sbin/ldconfig
   
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/*
-%{_libdir}/lib*.so.*
-%{_libdir}/gst/*
-%{_datadir}/*
+%attr(755,root,root) %{_libdir}/lib*.so.*
+%attr(755,root,root) %{_libdir}/gst/*.so*
+%attr(755,root,root) %{_libdir}/gst/*.la
+%{_mandir}/man1/*
 
 %files devel
 %defattr(644,root,root,755)
-%{_includedir}/*
-%{_libdir}/lib*.so
+%attr(755,root,root) %{_libdir}/lib*.so
+%{_includedir}/gst
+%{_pkgconfigdir}/*
 
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
+%{_libdir}/gst/lib*.a
