@@ -1,0 +1,11 @@
+--- gstreamer-0.7.3/gst-element-check.m4.wiget	2003-12-22 11:30:33.561790279 +0100
++++ gstreamer-0.7.3/gst-element-check.m4	2003-12-22 11:30:42.385424636 +0100
+@@ -4,7 +4,7 @@
+ 
+ dnl AM_GST_ELEMENT_CHECK(ELEMENT-NAME, ACTION-IF-FOUND, ACTION-IF-NOT-FOUND)
+ 
+-AC_DEFUN(AM_GST_ELEMENT_CHECK,
++AC_DEFUN([AM_GST_ELEMENT_CHECK],
+ [
+   AC_CHECK_PROG(GST_INSPECT, gst-inspect, gst-inspect, [])
+   if test "x$GST_INSPECT" != "x"; then
