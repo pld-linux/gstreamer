@@ -1,13 +1,14 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl):	GStreamer - biblioteki ¶rodowiska do obróbki strumieni
 Name:		gstreamer
-Version:	0.8.0
+Version:	0.8.1
 Release:	1
 License:	LGPL
 Group:		Libraries
 Source0:	http://ftp.gnome.org/pub/gnome/sources/%{name}/0.8/%{name}-%{version}.tar.bz2
-# Source0-md5:	275384c4001c6b934f159952f39e2f36
+# Source0-md5:	154c95169f343b53f15cc5a124ef673d
 Patch0:		%{name}-without_ps_pdf.patch
+Patch1:		%{name}-docs.patch
 URL:		http://gstreamer.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -79,10 +80,11 @@ Statyczne wersje bibliotek GStreamer.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
-#intltoolize --copy --force
-#%%{__gettextize}
+intltoolize --copy --force
+%{__gettextize}
 %{__libtoolize}
 %{__aclocal} -I common/m4
 %{__autoconf}
@@ -131,9 +133,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/ldconfig
-# how to do it ????
-%{_bindir}/gst-register --gst-registry=%{_gstcachedir}/registry.xml
-#%%{_bindir}/gst-register --gst-mask=0
+%{_bindir}/gst-register --gst-registry=%{_gstcachedir}/registry.xml > /dev/null 2> /dev/null
 
 %postun	-p /sbin/ldconfig
 
