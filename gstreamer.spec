@@ -11,6 +11,7 @@ BuildRequires:	glib2-devel >= 2.0.0
 BuildRequires:	libxml2-devel >= 2.4.17
 BuildRequires:	nasm
 BuildRequires:	pkgconfig
+Requires(post):	/sbin/ldconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -84,6 +85,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*
+%dir %{_libdir}/gst
 %attr(755,root,root) %{_libdir}/gst/*.so*
 %attr(755,root,root) %{_libdir}/gst/*.la
 %{_mandir}/man1/*
