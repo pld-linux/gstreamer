@@ -90,6 +90,8 @@ Statyczne wersje bibliotek GStreamer.
 %{__autoconf}
 %{__autoheader}
 %{__automake}
+cp -f /usr/share/automake/config.sub libs/ext/cothreads/
+
 %configure \
 %ifarch i586 i686 athlon
 	--enable-fast-stack-trash \
