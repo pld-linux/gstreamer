@@ -96,7 +96,6 @@ rm -f missing
 	--disable-examples \
 	--disable-tests \
 	--disable-debug \
-	--disable-DEBUG \
 	--disable-debug-color \
 	--enable-docs-build \
 	--with-html-dir=%{_gtkdocdir} \
