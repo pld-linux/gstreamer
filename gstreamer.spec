@@ -78,7 +78,6 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
     DESTDIR=$RPM_BUILD_ROOT \
     
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -92,12 +91,12 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*
-%attr(755,root,root) %{_libdir}/lib*.so
-%attr(755,root,root) %{_libdir}/%{name}-0.5/*.so*
+%attr(755,root,root) %{_libdir}/%{name}-0.5/*.so
 %{_mandir}/man1/*
 
 %files devel
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/lib*.so
 %{_libdir}/lib*.la
 %{_libdir}/%{name}-0.5/lib*.la
 %{_includedir}/%{name}-0.5
