@@ -13,7 +13,7 @@ BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	flex
-BuildRequires:	ghostscript
+BuildRequires:	gettext-devel >= 0.14.1
 BuildRequires:	glib2-devel >= 1:2.4.2
 BuildRequires:	gtk-doc >= 1.0
 BuildRequires:	intltool
