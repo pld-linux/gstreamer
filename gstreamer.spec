@@ -1,7 +1,7 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl):	GStreamer - biblioteki ∂rodowiska do obrÛbki strumieni
 Name:		gstreamer
-Version:	0.3.1
+Version:	0.3.2
 Release:	1
 License:	LGPL
 Group:		Libraries
@@ -12,7 +12,7 @@ Group(pl):	Biblioteki
 Group(pt_BR):	Bibliotecas
 Group(ru):	‚…¬Ã…œ‘≈À…
 Group(uk):	‚¶¬Ã¶œ‘≈À…
-Source0:	http://download.sourceforge.net/gstreamer/%{name}-%{version}.tar.bz2
+Source0:	http://prdownloads.sourceforge.net/gstreamer/%{name}-%{version}.tar.bz2
 URL:		http://gstreamer.net/
 BuildRequires:	glib2-devel
 BuildRequires:	libxml2-devel
