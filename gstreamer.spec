@@ -9,13 +9,14 @@ Source0:	http://ftp.gnome.org/pub/gnome/sources/%{name}/0.8/%{name}-%{version}.t
 # Source0-md5:	090bdbd35c9b831746694d020356d5b6
 Patch0:		%{name}-without_ps_pdf.patch
 URL:		http://gstreamer.net/
-BuildRequires:	autoconf
+BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	ghostscript
 BuildRequires:	glib2-devel >= 1:2.4.2
 BuildRequires:	gtk-doc >= 1.0
+BuildRequires:	intltool
 BuildRequires:	libtool
 BuildRequires:	libxml2-devel >= 2.4.17
 BuildRequires:	nasm
