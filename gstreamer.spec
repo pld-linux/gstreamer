@@ -87,7 +87,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/lib*.so.*
 %dir %{_libdir}/gst
 %attr(755,root,root) %{_libdir}/gst/*.so*
-%attr(755,root,root) %{_libdir}/gst/*.la
+%{_libdir}/gst/*.la
 %{_mandir}/man1/*
 
 %files devel
