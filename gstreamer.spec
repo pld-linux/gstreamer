@@ -19,7 +19,7 @@ BuildRequires:	libtool >= 1.4
 BuildRequires:	libxml2-devel >= 2.4.17
 BuildRequires:	nasm
 BuildRequires:	perl-base
-BuildRequires:	pkgconfig >= 0.9.0
+BuildRequires:	pkgconfig >= 1:0.9.0
 BuildRequires:	popt-devel >= 1.6.3
 BuildRequires:	transfig
 BuildRequires:	xmlto
