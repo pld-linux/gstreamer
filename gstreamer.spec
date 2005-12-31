@@ -1,13 +1,17 @@
+
+%define		_vmajor		0.10
+%define		_vminor		1
+
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl):	GStreamer - biblioteki ¶rodowiska do obróbki strumieni
 Name:		gstreamer
-Version:	0.8.11
-Release:	1
+Version:	%{_vmajor}.%{_vminor}
+Release:	0.1
 License:	LGPL
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.bz2
-# Source0-md5:	3a251cf05b794ebac04e18f71e5b26eb
-Patch0:		%{name}-without_ps_pdf.patch
+# Source0-md5:	2a56154a6636a404ab9107524d4b7a89
+#Patch0:		%{name}-without_ps_pdf.patch
 URL:		http://gstreamer.net/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake >= 1.6
@@ -27,8 +31,8 @@ Requires:	glib2 >= 1:2.6.0
 Requires(post):	/sbin/ldconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_gstlibdir	%{_libdir}/gstreamer-0.8
-%define		_gstincludedir	%{_includedir}/gstreamer-0.8
+%define		_gstlibdir	%{_libdir}/gstreamer-%{_vmajor}
+%define		_gstincludedir	%{_includedir}/gstreamer-%{_vmajor}
 %define		_gstcachedir	%{_var}/cache/gstreamer
 
 %description
@@ -78,7 +82,7 @@ Statyczne wersje bibliotek GStreamer.
 
 %prep
 %setup -q
-%patch0 -p1
+#%patch0 -p1
 
 %build
 %{__libtoolize}
@@ -88,19 +92,10 @@ Statyczne wersje bibliotek GStreamer.
 %{__automake}
 
 %configure \
-	--program-suffix="" \
-%ifarch i586 i686 athlon
-	--enable-fast-stack-trash \
-%else
-	--disable-fast-stack-trash \
-%endif
-	--enable-libmmx \
-	--enable-atomic \
 	--disable-examples \
 	--disable-tests \
-	--disable-debug \
-	--disable-debug-color \
-	--enable-docs-build \
+	--enable-docbook \
+	--enable-gtk-doc \
 	--with-html-dir=%{_gtkdocdir} \
 	--with-cachedir=%{_gstcachedir}
 	
@@ -113,8 +108,9 @@ install -d $RPM_BUILD_ROOT{%{_gstcachedir},%{_docdir}/%{name}-devel-%{version}}
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-touch $RPM_BUILD_ROOT%{_gstcachedir}/registry.xml
+#touch $RPM_BUILD_ROOT%{_gstcachedir}/registry.xml
 
+mv $RPM_BUILD_ROOT%{_docdir}/%{name}-{%{_vmajor},%{version}}
 mv $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/{manual,pwg} \
 	$RPM_BUILD_ROOT%{_docdir}/%{name}-devel-%{version}
 
@@ -128,8 +124,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/ldconfig
-umask 022
-%{_bindir}/gst-register --gst-registry=%{_gstcachedir}/registry.xml > /dev/null 2> /dev/null ||:
 
 %postun	-p /sbin/ldconfig
 
@@ -141,14 +135,14 @@ umask 022
 %dir %{_gstlibdir}
 %attr(755,root,root) %{_gstlibdir}/*.so
 %dir %{_gstcachedir}
-%ghost %{_gstcachedir}/registry.xml
+#%ghost %{_gstcachedir}/registry.xml
 %{_mandir}/man1/*
 
 %files devel
 %defattr(644,root,root,755)
-%doc DEVEL
 %attr(755,root,root) %{_libdir}/lib*.so
 %{_libdir}/lib*.la
+%{_docdir}/%{name}-devel-%{version}
 %{_gstincludedir}
 %{_gtkdocdir}/*
 %{_pkgconfigdir}/*
