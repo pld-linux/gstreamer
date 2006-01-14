@@ -19,8 +19,8 @@ BuildRequires:	automake >= 1.6
 BuildRequires:	bison >= 1.35
 BuildRequires:	docbook-utils >= 0.6.10
 BuildRequires:	flex
-BuildRequires:	glib2-devel >= 1:2.6.0
-BuildRequires:	gtk-doc >= 1.0
+BuildRequires:	glib2-devel >= 1:2.8.0
+BuildRequires:	gtk-doc >= 1.3
 BuildRequires:	libtool >= 1.4
 BuildRequires:	libxml2-devel >= 2.4.17
 BuildRequires:	nasm
@@ -29,7 +29,7 @@ BuildRequires:	pkgconfig >= 1:0.9.0
 BuildRequires:	popt-devel >= 1.6.3
 BuildRequires:	transfig
 BuildRequires:	xmlto
-Requires:	glib2 >= 1:2.6.0
+Requires:	glib2 >= 1:2.8.0
 Requires(post):	/sbin/ldconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -58,7 +58,7 @@ Summary:	Include files for GStreamer streaming-media framework
 Summary(pl):	Pliki nag³ówkowe do ¶rodowiska obróbki strumieni GStreamer
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	glib2-devel >= 1:2.4.4
+Requires:	glib2-devel >= 1:2.8.0
 Requires:	libxml2-devel >= 2.4.17
 Requires:	popt-devel >= 1.6.3
 
