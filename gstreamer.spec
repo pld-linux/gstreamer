@@ -11,11 +11,13 @@ License:	LGPL
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.bz2
 # Source0-md5:	2a56154a6636a404ab9107524d4b7a89
-#Patch0:		%{name}-without_ps_pdf.patch
+Patch0:		%{name}-without_ps_pdf.patch
+Patch1:		%{name}-eps.patch
 URL:		http://gstreamer.net/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake >= 1.6
 BuildRequires:	bison >= 1.35
+BuildRequires:	docbook-utils >= 0.6.10
 BuildRequires:	flex
 BuildRequires:	glib2-devel >= 1:2.6.0
 BuildRequires:	gtk-doc >= 1.0
@@ -82,7 +84,8 @@ Statyczne wersje bibliotek GStreamer.
 
 %prep
 %setup -q
-#%patch0 -p1
+%patch0 -p1
+%patch1 -p1
 
 %build
 %{__libtoolize}
