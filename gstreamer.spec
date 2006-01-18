@@ -1,6 +1,6 @@
 
 %define		_vmajor		0.10
-%define		_vminor		1
+%define		_vminor		2
 
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl):	GStreamer - biblioteki ¶rodowiska do obróbki strumieni
@@ -10,7 +10,7 @@ Release:	0.1
 License:	LGPL
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.bz2
-# Source0-md5:	2a56154a6636a404ab9107524d4b7a89
+# Source0-md5:	870206cef20bcc6fce8f3531b64a818b
 Patch0:		%{name}-without_ps_pdf.patch
 Patch1:		%{name}-eps.patch
 URL:		http://gstreamer.net/
@@ -27,10 +27,11 @@ BuildRequires:	nasm
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig >= 1:0.9.0
 BuildRequires:	popt-devel >= 1.6.3
+# not sure it is a right place for this BR
+BuildRequires:	python-PyXML
 BuildRequires:	transfig
 BuildRequires:	xmlto
 Requires:	glib2 >= 1:2.8.0
-Requires(post):	/sbin/ldconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_gstlibdir	%{_libdir}/gstreamer-%{_vmajor}
@@ -82,6 +83,18 @@ Static versions of GStreamer libraries.
 %description static -l pl
 Statyczne wersje bibliotek GStreamer.
 
+%package apidocs
+Summary:	GStreamer API documentation
+Summary(pl):	Dokumentacja API Gstreamera
+Group:		Documentation
+Requires:	gtk-doc-common
+
+%description apidocs
+GStreamer API documentation.
+
+%description apidocs -l pl
+Dokumentacja API Gstreamera.
+
 %prep
 %setup -q
 %patch0 -p1
@@ -125,9 +138,7 @@ rm -f $RPM_BUILD_ROOT%{_gstlibdir}/lib*.{la,a}
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post
-/sbin/ldconfig
-
+%post	-p /sbin/ldconfig
 %postun	-p /sbin/ldconfig
 
 %files -f %{name}.lang
@@ -147,10 +158,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/lib*.la
 %{_docdir}/%{name}-devel-%{version}
 %{_gstincludedir}
-%{_gtkdocdir}/*
 %{_pkgconfigdir}/*
 %{_aclocaldir}/*
 
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
+
+%files apidocs
+%defattr(644,root,root,755)
+%{_gtkdocdir}/*
