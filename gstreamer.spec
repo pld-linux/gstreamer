@@ -117,7 +117,7 @@ Dokumentacja API Gstreamera.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_docdir}/%{name}-devel-%{version}}
+install -d $RPM_BUILD_ROOT%{_docdir}/%{name}-devel-%{version}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
