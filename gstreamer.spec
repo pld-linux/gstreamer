@@ -108,6 +108,7 @@ Dokumentacja API Gstreamera.
 
 %configure \
 	--disable-examples \
+	--disable-pspdf \
 	--disable-tests \
 	--enable-docbook \
 	--enable-gtk-doc \
