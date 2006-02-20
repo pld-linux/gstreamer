@@ -6,7 +6,7 @@ Summary:	GStreamer Streaming-media framework runtime
 Summary(pl):	GStreamer - biblioteki ¶rodowiska do obróbki strumieni
 Name:		gstreamer
 Version:	%{_vmajor}.%{_vminor}
-Release:	0.1
+Release:	1
 License:	LGPL
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.bz2
@@ -36,7 +36,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_gstlibdir	%{_libdir}/gstreamer-%{_vmajor}
 %define		_gstincludedir	%{_includedir}/gstreamer-%{_vmajor}
-%define		_gstcachedir	%{_var}/cache/gstreamer
 
 %description
 GStreamer is a streaming-media framework, based on graphs of filters
@@ -112,19 +111,16 @@ Dokumentacja API Gstreamera.
 	--disable-tests \
 	--enable-docbook \
 	--enable-gtk-doc \
-	--with-html-dir=%{_gtkdocdir} \
-	--with-cachedir=%{_gstcachedir}
+	--with-html-dir=%{_gtkdocdir}
 	
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_gstcachedir},%{_docdir}/%{name}-devel-%{version}}
+install -d $RPM_BUILD_ROOT{%{_docdir}/%{name}-devel-%{version}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
-
-#touch $RPM_BUILD_ROOT%{_gstcachedir}/registry.xml
 
 mv $RPM_BUILD_ROOT%{_docdir}/%{name}-{%{_vmajor},%{version}}
 mv $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/{manual,pwg} \
@@ -148,8 +144,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/lib*.so.*.*.*
 %dir %{_gstlibdir}
 %attr(755,root,root) %{_gstlibdir}/*.so
-%dir %{_gstcachedir}
-#%ghost %{_gstcachedir}/registry.xml
 %{_mandir}/man1/*
 
 %files devel
