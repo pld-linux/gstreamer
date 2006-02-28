@@ -114,7 +114,7 @@ Dokumentacja API Gstreamera.
 	--enable-docbook \
 	--enable-gtk-doc \
 	--with-html-dir=%{_gtkdocdir}
-	
+
 %{__make}
 
 %install
