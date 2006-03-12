@@ -17,7 +17,7 @@ URL:		http://gstreamer.net/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake >= 1.6
 BuildRequires:	bison >= 1.35
-BuildRequires:	check
+BuildRequires:	check >= 0.9.3-2
 BuildRequires:	docbook-utils >= 0.6.10
 BuildRequires:	flex
 BuildRequires:	glib2-devel >= 1:2.8.0
