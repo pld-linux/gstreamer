@@ -1,35 +1,42 @@
+
+%define		_vmajor		0.10
+%define		_vminor		5
+
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl):	GStreamer - biblioteki ¶rodowiska do obróbki strumieni
 Name:		gstreamer
-Version:	0.8.11
+Version:	%{_vmajor}.%{_vminor}
 Release:	1
 License:	LGPL
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.bz2
-# Source0-md5:	3a251cf05b794ebac04e18f71e5b26eb
+# Source0-md5:	f088c1303f19f0423f35d699deed92e3
 Patch0:		%{name}-without_ps_pdf.patch
+Patch1:		%{name}-eps.patch
 URL:		http://gstreamer.net/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake >= 1.6
 BuildRequires:	bison >= 1.35
+BuildRequires:	check >= 0.9.3-2
+BuildRequires:	docbook-utils >= 0.6.10
 BuildRequires:	flex
-BuildRequires:	glib2-devel >= 1:2.6.0
-BuildRequires:	gtk-doc >= 1.0
+BuildRequires:	glib2-devel >= 1:2.8.0
+BuildRequires:	gtk-doc >= 1.3
 BuildRequires:	libtool >= 1.4
 BuildRequires:	libxml2-devel >= 2.4.17
 BuildRequires:	nasm
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig >= 1:0.9.0
 BuildRequires:	popt-devel >= 1.6.3
+# not sure it is a right place for this BR
+BuildRequires:	python-PyXML
 BuildRequires:	transfig
 BuildRequires:	xmlto
-Requires:	glib2 >= 1:2.6.0
-Requires(post):	/sbin/ldconfig
+Requires:	glib2 >= 1:2.8.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_gstlibdir	%{_libdir}/gstreamer-0.8
-%define		_gstincludedir	%{_includedir}/gstreamer-0.8
-%define		_gstcachedir	%{_var}/cache/gstreamer
+%define		_gstlibdir	%{_libdir}/gstreamer-%{_vmajor}
+%define		_gstincludedir	%{_includedir}/gstreamer-%{_vmajor}
 
 %description
 GStreamer is a streaming-media framework, based on graphs of filters
@@ -52,7 +59,7 @@ Summary:	Include files for GStreamer streaming-media framework
 Summary(pl):	Pliki nag³ówkowe do ¶rodowiska obróbki strumieni GStreamer
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	glib2-devel >= 1:2.4.4
+Requires:	glib2-devel >= 1:2.8.0
 Requires:	libxml2-devel >= 2.4.17
 Requires:	popt-devel >= 1.6.3
 
@@ -76,9 +83,22 @@ Static versions of GStreamer libraries.
 %description static -l pl
 Statyczne wersje bibliotek GStreamer.
 
+%package apidocs
+Summary:	GStreamer API documentation
+Summary(pl):	Dokumentacja API Gstreamera
+Group:		Documentation
+Requires:	gtk-doc-common
+
+%description apidocs
+GStreamer API documentation.
+
+%description apidocs -l pl
+Dokumentacja API Gstreamera.
+
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 %{__libtoolize}
@@ -88,33 +108,23 @@ Statyczne wersje bibliotek GStreamer.
 %{__automake}
 
 %configure \
-	--program-suffix="" \
-%ifarch i586 i686 athlon
-	--enable-fast-stack-trash \
-%else
-	--disable-fast-stack-trash \
-%endif
-	--enable-libmmx \
-	--enable-atomic \
 	--disable-examples \
+	--disable-pspdf \
 	--disable-tests \
-	--disable-debug \
-	--disable-debug-color \
-	--enable-docs-build \
-	--with-html-dir=%{_gtkdocdir} \
-	--with-cachedir=%{_gstcachedir}
-	
+	--enable-docbook \
+	--enable-gtk-doc \
+	--with-html-dir=%{_gtkdocdir}
+
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_gstcachedir},%{_docdir}/%{name}-devel-%{version}}
+install -d $RPM_BUILD_ROOT%{_docdir}/%{name}-devel-%{version}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-touch $RPM_BUILD_ROOT%{_gstcachedir}/registry.xml
-
+mv $RPM_BUILD_ROOT%{_docdir}/%{name}-{%{_vmajor},%{version}}
 mv $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/{manual,pwg} \
 	$RPM_BUILD_ROOT%{_docdir}/%{name}-devel-%{version}
 
@@ -126,11 +136,7 @@ rm -f $RPM_BUILD_ROOT%{_gstlibdir}/lib*.{la,a}
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post
-/sbin/ldconfig
-umask 022
-%{_bindir}/gst-register --gst-registry=%{_gstcachedir}/registry.xml > /dev/null 2> /dev/null ||:
-
+%post	-p /sbin/ldconfig
 %postun	-p /sbin/ldconfig
 
 %files -f %{name}.lang
@@ -140,20 +146,21 @@ umask 022
 %attr(755,root,root) %{_libdir}/lib*.so.*.*.*
 %dir %{_gstlibdir}
 %attr(755,root,root) %{_gstlibdir}/*.so
-%dir %{_gstcachedir}
-%ghost %{_gstcachedir}/registry.xml
 %{_mandir}/man1/*
 
 %files devel
 %defattr(644,root,root,755)
-%doc DEVEL
 %attr(755,root,root) %{_libdir}/lib*.so
 %{_libdir}/lib*.la
+%{_docdir}/%{name}-devel-%{version}
 %{_gstincludedir}
-%{_gtkdocdir}/*
 %{_pkgconfigdir}/*
 %{_aclocaldir}/*
 
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
+
+%files apidocs
+%defattr(644,root,root,755)
+%{_gtkdocdir}/*
