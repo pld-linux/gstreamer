@@ -6,7 +6,7 @@ Summary:	GStreamer Streaming-media framework runtime
 Summary(pl):	GStreamer - biblioteki ¶rodowiska do obróbki strumieni
 Name:		gstreamer
 Version:	%{_vmajor}.%{_vminor}
-Release:	1
+Release:	2
 License:	LGPL
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.bz2
@@ -20,10 +20,10 @@ BuildRequires:	bison >= 1.35
 BuildRequires:	check >= 0.9.3-2
 BuildRequires:	docbook-utils >= 0.6.10
 BuildRequires:	flex
-BuildRequires:	glib2-devel >= 1:2.8.0
-BuildRequires:	gtk-doc >= 1.3
+BuildRequires:	glib2-devel >= 1:2.12.0
+BuildRequires:	gtk-doc >= 1.6
 BuildRequires:	libtool >= 1.4
-BuildRequires:	libxml2-devel >= 2.4.17
+BuildRequires:	libxml2-devel >= 1:2.6.26
 BuildRequires:	nasm
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig >= 1:0.9.0
@@ -32,7 +32,7 @@ BuildRequires:	popt-devel >= 1.6.3
 BuildRequires:	python-PyXML
 BuildRequires:	transfig
 BuildRequires:	xmlto
-Requires:	glib2 >= 1:2.8.0
+Requires:	glib2 >= 1:2.12.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_gstlibdir	%{_libdir}/gstreamer-%{_vmajor}
@@ -59,8 +59,8 @@ Summary:	Include files for GStreamer streaming-media framework
 Summary(pl):	Pliki nag³ówkowe do ¶rodowiska obróbki strumieni GStreamer
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	glib2-devel >= 1:2.8.0
-Requires:	libxml2-devel >= 2.4.17
+Requires:	glib2-devel >= 1:2.12.0
+Requires:	libxml2-devel >= 1:2.6.26
 Requires:	popt-devel >= 1.6.3
 
 %description devel
@@ -106,7 +106,7 @@ Dokumentacja API Gstreamera.
 %{__autoconf}
 %{__autoheader}
 %{__automake}
-
+LDFLAGS="%{rpmldflags} -Wl,--as-needed"
 %configure \
 	--disable-examples \
 	--disable-pspdf \
