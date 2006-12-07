@@ -1,6 +1,6 @@
 
 %define		_vmajor		0.10
-%define		_vminor		10
+%define		_vminor		11
 
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl):	GStreamer - biblioteki ¶rodowiska do obróbki strumieni
@@ -10,7 +10,7 @@ Release:	1
 License:	LGPL
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.bz2
-# Source0-md5:	6875bf0bd3cf38b9ae1362b9e644e6fc
+# Source0-md5:	67240094e08c845b7bbcfba755c95695
 Patch0:		%{name}-without_ps_pdf.patch
 Patch1:		%{name}-eps.patch
 URL:		http://gstreamer.net/
@@ -20,6 +20,7 @@ BuildRequires:	bison >= 1.35
 BuildRequires:	check >= 0.9.3-2
 BuildRequires:	docbook-utils >= 0.6.10
 BuildRequires:	flex
+BuildRequires:	gettext-devel >= 0.11.5
 BuildRequires:	glib2-devel >= 1:2.12.0
 BuildRequires:	gtk-doc >= 1.6
 BuildRequires:	libtool >= 1.4
@@ -101,12 +102,12 @@ Dokumentacja API Gstreamera.
 %patch1 -p1
 
 %build
+%{__gettextize}
 %{__libtoolize}
 %{__aclocal} -I common/m4
 %{__autoconf}
 %{__autoheader}
 %{__automake}
-LDFLAGS="%{rpmldflags} -Wl,--as-needed"
 %configure \
 	--disable-examples \
 	--disable-pspdf \
