@@ -3,7 +3,7 @@
 %define		_vminor		11
 
 Summary:	GStreamer Streaming-media framework runtime
-Summary(pl):	GStreamer - biblioteki ∂rodowiska do obrÛbki strumieni
+Summary(pl.UTF-8):   GStreamer - biblioteki ≈õrodowiska do obr√≥bki strumieni
 Name:		gstreamer
 Version:	%{_vmajor}.%{_vminor}
 Release:	3
@@ -47,17 +47,17 @@ about anything else media-related. Its plugin-based architecture means
 that new data types or processing capabilities can be added simply by
 installing new plugins.
 
-%description -l pl
-GStreamer to ∂rodowisko obrÛbki danych strumieniowych, bazuj±ce na
-grafie filtrÛw operuj±cych na danych medialnych. Aplikacje uøywaj±ce
-tej biblioteki mog± robiÊ wszystko od przetwarzania dºwiÍku w czasie
-rzeczywistym, do odtwarzania filmÛw i czegokolwiek innego zwi±zanego z
-mediami. Architektura bazuj±ca na wtyczkach pozwala na ≥atwe dodawanie
-nowych typÛw danych lub moøliwo∂ci obrÛbki.
+%description -l pl.UTF-8
+GStreamer to ≈õrodowisko obr√≥bki danych strumieniowych, bazujƒÖce na
+grafie filtr√≥w operujƒÖcych na danych medialnych. Aplikacje u≈ºywajƒÖce
+tej biblioteki mogƒÖ robiƒá wszystko od przetwarzania d≈∫wiƒôku w czasie
+rzeczywistym, do odtwarzania film√≥w i czegokolwiek innego zwiƒÖzanego z
+mediami. Architektura bazujƒÖca na wtyczkach pozwala na ≈Çatwe dodawanie
+nowych typ√≥w danych lub mo≈ºliwo≈õci obr√≥bki.
 
 %package devel
 Summary:	Include files for GStreamer streaming-media framework
-Summary(pl):	Pliki nag≥Ûwkowe do ∂rodowiska obrÛbki strumieni GStreamer
+Summary(pl.UTF-8):   Pliki nag≈Ç√≥wkowe do ≈õrodowiska obr√≥bki strumieni GStreamer
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	glib2-devel >= 1:2.12.0
@@ -68,32 +68,32 @@ Requires:	popt-devel >= 1.6.3
 This package contains the includes files necessary to develop
 applications and plugins for GStreamer.
 
-%description devel -l pl
-Ten pakiet zawiera pliki nag≥Ûwkowe potrzebne do rozwijania aplikacji
+%description devel -l pl.UTF-8
+Ten pakiet zawiera pliki nag≈Ç√≥wkowe potrzebne do rozwijania aplikacji
 i wtyczek do GStreamera.
 
 %package static
 Summary:	GStreamer static libraries
-Summary(pl):	Biblioteki statyczne GStreamer
+Summary(pl.UTF-8):   Biblioteki statyczne GStreamer
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static versions of GStreamer libraries.
 
-%description static -l pl
+%description static -l pl.UTF-8
 Statyczne wersje bibliotek GStreamer.
 
 %package apidocs
 Summary:	GStreamer API documentation
-Summary(pl):	Dokumentacja API Gstreamera
+Summary(pl.UTF-8):   Dokumentacja API Gstreamera
 Group:		Documentation
 Requires:	gtk-doc-common
 
 %description apidocs
 GStreamer API documentation.
 
-%description apidocs -l pl
+%description apidocs -l pl.UTF-8
 Dokumentacja API Gstreamera.
 
 %prep
