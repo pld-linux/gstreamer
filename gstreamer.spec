@@ -3,7 +3,7 @@
 %define		_vminor		11
 
 Summary:	GStreamer Streaming-media framework runtime
-Summary(pl.UTF-8):   GStreamer - biblioteki środowiska do obróbki strumieni
+Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
 Version:	%{_vmajor}.%{_vminor}
 Release:	3
@@ -57,7 +57,7 @@ nowych typów danych lub możliwości obróbki.
 
 %package devel
 Summary:	Include files for GStreamer streaming-media framework
-Summary(pl.UTF-8):   Pliki nagłówkowe do środowiska obróbki strumieni GStreamer
+Summary(pl.UTF-8):	Pliki nagłówkowe do środowiska obróbki strumieni GStreamer
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	glib2-devel >= 1:2.12.0
@@ -74,7 +74,7 @@ i wtyczek do GStreamera.
 
 %package static
 Summary:	GStreamer static libraries
-Summary(pl.UTF-8):   Biblioteki statyczne GStreamer
+Summary(pl.UTF-8):	Biblioteki statyczne GStreamer
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
@@ -86,7 +86,7 @@ Statyczne wersje bibliotek GStreamer.
 
 %package apidocs
 Summary:	GStreamer API documentation
-Summary(pl.UTF-8):   Dokumentacja API Gstreamera
+Summary(pl.UTF-8):	Dokumentacja API Gstreamera
 Group:		Documentation
 Requires:	gtk-doc-common
 
