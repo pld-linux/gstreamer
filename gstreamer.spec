@@ -1,6 +1,6 @@
 
 %define		_vmajor		0.10
-%define		_vminor		13
+%define		_vminor		14
 
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
@@ -10,7 +10,7 @@ Release:	1
 License:	LGPL
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.bz2
-# Source0-md5:	69b594b43e52e1d0eaf512a89c7b3137
+# Source0-md5:	eb83767c877990c8a7540693d196c822
 Patch0:		%{name}-without_ps_pdf.patch
 Patch1:		%{name}-eps.patch
 URL:		http://gstreamer.net/
