@@ -1,19 +1,15 @@
-
-%define		_vmajor		0.10
-%define		_vminor		14
-
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	%{_vmajor}.%{_vminor}
-Release:	2
+Version:	0.10.15
+Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.bz2
-# Source0-md5:	eb83767c877990c8a7540693d196c822
-Source1:	%{name}.pl.po
+# Source0-md5:	09f1c4ea025faef88b566fa26ec24ae0
 Patch0:		%{name}-without_ps_pdf.patch
 Patch1:		%{name}-eps.patch
+Patch2:		%{name}-pl.po-update.patch
 URL:		http://gstreamer.net/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake >= 1.6
@@ -37,8 +33,9 @@ BuildRequires:	xmlto
 Requires:	glib2 >= 1:2.12.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_gstlibdir	%{_libdir}/gstreamer-%{_vmajor}
-%define		_gstincludedir	%{_includedir}/gstreamer-%{_vmajor}
+%define		vmajor		%(echo %{version} | cut -d. -f1,2)
+%define		_gstlibdir	%{_libdir}/gstreamer-%{vmajor}
+%define		_gstincludedir	%{_includedir}/gstreamer-%{vmajor}
 
 %description
 GStreamer is a streaming-media framework, based on graphs of filters
@@ -101,9 +98,7 @@ Dokumentacja API Gstreamera.
 %setup -q
 %patch0 -p1
 %patch1 -p1
-
-cp %{SOURCE1} po/pl.po
-echo 'pl' >> po/LINGUAS
+%patch2 -p1
 
 %build
 # po/Makefile.in.in is modified
@@ -130,7 +125,7 @@ install -d $RPM_BUILD_ROOT%{_docdir}/%{name}-devel-%{version}
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-mv $RPM_BUILD_ROOT%{_docdir}/%{name}-{%{_vmajor},%{version}}
+mv $RPM_BUILD_ROOT%{_docdir}/%{name}-{%{vmajor},%{version}}
 mv $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/{manual,pwg} \
 	$RPM_BUILD_ROOT%{_docdir}/%{name}-devel-%{version}
 
@@ -148,25 +143,59 @@ rm -rf $RPM_BUILD_ROOT
 %files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog NEWS README TODO
-%attr(755,root,root) %{_bindir}/*
-%attr(755,root,root) %{_libdir}/lib*.so.*.*.*
+%attr(755,root,root) %{_bindir}/gst-*
+%attr(755,root,root) %{_libdir}/libgstbase-0.10.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libgstbase-0.10.so.0
+%attr(755,root,root) %{_libdir}/libgstcheck-0.10.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libgstcheck-0.10.so.0
+%attr(755,root,root) %{_libdir}/libgstcontroller-0.10.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libgstcontroller-0.10.so.0
+%attr(755,root,root) %{_libdir}/libgstdataprotocol-0.10.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libgstdataprotocol-0.10.so.0
+%attr(755,root,root) %{_libdir}/libgstnet-0.10.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libgstnet-0.10.so.0
+%attr(755,root,root) %{_libdir}/libgstreamer-0.10.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libgstreamer-0.10.so.0
 %dir %{_gstlibdir}
-%attr(755,root,root) %{_gstlibdir}/*.so
-%{_mandir}/man1/*
+%attr(755,root,root) %{_gstlibdir}/libgstcoreelements.so
+%attr(755,root,root) %{_gstlibdir}/libgstcoreindexers.so
+%{_mandir}/man1/gst-*.1*
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/lib*.so
-%{_libdir}/lib*.la
+%attr(755,root,root) %{_libdir}/libgstbase-0.10.so
+%attr(755,root,root) %{_libdir}/libgstcheck-0.10.so
+%attr(755,root,root) %{_libdir}/libgstcontroller-0.10.so
+%attr(755,root,root) %{_libdir}/libgstdataprotocol-0.10.so
+%attr(755,root,root) %{_libdir}/libgstnet-0.10.so
+%attr(755,root,root) %{_libdir}/libgstreamer-0.10.so
+%{_libdir}/libgstbase-0.10.la
+%{_libdir}/libgstcheck-0.10.la
+%{_libdir}/libgstcontroller-0.10.la
+%{_libdir}/libgstdataprotocol-0.10.la
+%{_libdir}/libgstnet-0.10.la
+%{_libdir}/libgstreamer-0.10.la
 %{_docdir}/%{name}-devel-%{version}
 %{_gstincludedir}
-%{_pkgconfigdir}/*
-%{_aclocaldir}/*
+%{_pkgconfigdir}/gstreamer-0.10.pc
+%{_pkgconfigdir}/gstreamer-base-0.10.pc
+%{_pkgconfigdir}/gstreamer-check-0.10.pc
+%{_pkgconfigdir}/gstreamer-controller-0.10.pc
+%{_pkgconfigdir}/gstreamer-dataprotocol-0.10.pc
+%{_pkgconfigdir}/gstreamer-net-0.10.pc
+%{_aclocaldir}/gst-element-check-0.10.m4
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/lib*.a
+%{_libdir}/libgstbase-0.10.a
+%{_libdir}/libgstcheck-0.10.a
+%{_libdir}/libgstcontroller-0.10.a
+%{_libdir}/libgstdataprotocol-0.10.a
+%{_libdir}/libgstnet-0.10.a
+%{_libdir}/libgstreamer-0.10.a
 
 %files apidocs
 %defattr(644,root,root,755)
-%{_gtkdocdir}/*
+%{_gtkdocdir}/gstreamer-0.10
+%{_gtkdocdir}/gstreamer-libs-0.10
+%{_gtkdocdir}/gstreamer-plugins-0.10
