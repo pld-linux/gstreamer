@@ -2,13 +2,14 @@ Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
 Version:	0.10.21
-Release:	2
+Release:	3
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.bz2
 # Source0-md5:	7bad90af3fd81a1535363cf85359125c
 Patch0:		%{name}-without_ps_pdf.patch
 Patch1:		%{name}-eps.patch
+Patch2:		%{name}-inspect-rpm-format.patch
 URL:		http://gstreamer.net/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake >= 1.6
@@ -97,6 +98,7 @@ Dokumentacja API Gstreamera.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p0
 
 %build
 # po/Makefile.in.in is modified
