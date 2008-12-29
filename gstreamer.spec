@@ -2,11 +2,13 @@ Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
 Version:	0.10.21
-Release:	3
+Release:	4
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.bz2
 # Source0-md5:	7bad90af3fd81a1535363cf85359125c
+Source1:	%{name}-rpmdeps.sh
+Source2:	%{name}-rpmmacros
 Patch0:		%{name}-without_ps_pdf.patch
 Patch1:		%{name}-eps.patch
 Patch2:		%{name}-inspect-rpm-format.patch
@@ -36,6 +38,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		vmajor		%(echo %{version} | cut -d. -f1,2)
 %define		_gstlibdir	%{_libdir}/gstreamer-%{vmajor}
 %define		_gstincludedir	%{_includedir}/gstreamer-%{vmajor}
+
+%define		rpmlibdir	/usr/lib/rpm
 
 %description
 GStreamer is a streaming-media framework, based on graphs of filters
@@ -120,10 +124,13 @@ Dokumentacja API Gstreamera.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_docdir}/%{name}-devel-%{version}
+install -d $RPM_BUILD_ROOT{%{_docdir}/%{name}-devel-%{version},%{rpmlibdir}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+install %{SOURCE1} $RPM_BUILD_ROOT%{rpmlibdir}/gstreamerdeps.sh
+install %{SOURCE2} $RPM_BUILD_ROOT%{rpmlibdir}/macros.gstreamer
 
 mv $RPM_BUILD_ROOT%{_docdir}/%{name}-{%{vmajor},%{version}}
 mv $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/{manual,pwg} \
@@ -184,6 +191,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_pkgconfigdir}/gstreamer-dataprotocol-0.10.pc
 %{_pkgconfigdir}/gstreamer-net-0.10.pc
 %{_aclocaldir}/gst-element-check-0.10.m4
+%attr(755,root,root) %{rpmlibdir}/gstreamerdeps.sh
+%{rpmlibdir}/macros.gstreamer
 
 %files static
 %defattr(644,root,root,755)
