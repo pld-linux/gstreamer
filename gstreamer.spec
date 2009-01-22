@@ -2,13 +2,12 @@ Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
 Version:	0.10.22
-Release:	1
+Release:	2
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.bz2
 # Source0-md5:	35dd8598837af4074753afe5b59e8ef2
 Source1:	%{name}-rpmdeps.sh
-Source2:	%{name}-rpmmacros
 Patch0:		%{name}-without_ps_pdf.patch
 Patch1:		%{name}-eps.patch
 Patch2:		%{name}-inspect-rpm-format.patch
@@ -130,7 +129,6 @@ install -d $RPM_BUILD_ROOT{%{_docdir}/%{name}-devel-%{version},%{rpmlibdir}}
 	DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{rpmlibdir}/gstreamerdeps.sh
-install %{SOURCE2} $RPM_BUILD_ROOT%{rpmlibdir}/macros.gstreamer
 
 mv $RPM_BUILD_ROOT%{_docdir}/%{name}-{%{vmajor},%{version}}
 mv $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/{manual,pwg} \
@@ -192,7 +190,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_pkgconfigdir}/gstreamer-net-0.10.pc
 %{_aclocaldir}/gst-element-check-0.10.m4
 %attr(755,root,root) %{rpmlibdir}/gstreamerdeps.sh
-%{rpmlibdir}/macros.gstreamer
 
 %files static
 %defattr(644,root,root,755)
