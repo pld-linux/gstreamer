@@ -16,10 +16,12 @@ BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake >= 1.6
 BuildRequires:	bison >= 1.35
 BuildRequires:	check >= 0.9.3-2
+BuildRequires:	docbook-dtd30-sgml
 BuildRequires:	docbook-utils >= 0.6.10
 BuildRequires:	flex
 BuildRequires:	gettext-devel >= 0.11.5
 BuildRequires:	glib2-devel >= 1:2.12.0
+BuildRequires:	gnome-doc-tools
 BuildRequires:	gtk-doc >= 1.6
 BuildRequires:	libtool >= 1.4
 BuildRequires:	libxml2-devel >= 1:2.6.26
