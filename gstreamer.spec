@@ -29,6 +29,7 @@ BuildRequires:	nasm
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig >= 1:0.9.0
 BuildRequires:	popt-devel >= 1.6.3
+BuildRequires:  gobject-introspection-devel >= 0.6.5
 # not sure it is a right place for this BR
 BuildRequires:	python-PyXML
 BuildRequires:	transfig
