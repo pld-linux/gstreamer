@@ -1,12 +1,12 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	0.10.24
+Version:	0.10.25
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.bz2
-# Source0-md5:	178d3326c96c360c9a15751bd5d73a6c
+# Source0-md5:	88544e034a051baf472983791d233076
 Source1:	%{name}-rpmdeps.sh
 Patch0:		%{name}-without_ps_pdf.patch
 Patch1:		%{name}-eps.patch
@@ -110,7 +110,7 @@ Dokumentacja API Gstreamera.
 # po/Makefile.in.in is modified
 #{__gettextize}
 %{__libtoolize}
-%{__aclocal} -I common/m4
+%{__aclocal} -I common/m4 -I .
 %{__autoconf}
 %{__autoheader}
 %{__automake}
@@ -122,7 +122,7 @@ Dokumentacja API Gstreamera.
 	--enable-gtk-doc \
 	--with-html-dir=%{_gtkdocdir}
 
-%{__make}
+%{__make} V=1
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -168,6 +168,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_gstlibdir}/libgstcoreelements.so
 %attr(755,root,root) %{_gstlibdir}/libgstcoreindexers.so
 %{_mandir}/man1/gst-*.1*
+%{_libdir}/girepository-1.0/Gst-0.10.typelib
+%{_libdir}/girepository-1.0/GstBase-0.10.typelib
+%{_libdir}/girepository-1.0/GstCheck-0.10.typelib
+%{_libdir}/girepository-1.0/GstController-0.10.typelib
+%{_libdir}/girepository-1.0/GstNet-0.10.typelib
 
 %files devel
 %defattr(644,root,root,755)
@@ -193,6 +198,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_pkgconfigdir}/gstreamer-net-0.10.pc
 %{_aclocaldir}/gst-element-check-0.10.m4
 %attr(755,root,root) %{rpmlibdir}/gstreamerdeps.sh
+%{_datadir}/gir-1.0/Gst-0.10.gir
+%{_datadir}/gir-1.0/GstBase-0.10.gir
+%{_datadir}/gir-1.0/GstCheck-0.10.gir
+%{_datadir}/gir-1.0/GstController-0.10.gir
+%{_datadir}/gir-1.0/GstNet-0.10.gir
 
 %files static
 %defattr(644,root,root,755)
