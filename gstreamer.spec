@@ -1,12 +1,12 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	0.10.25
+Version:	0.10.26
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.bz2
-# Source0-md5:	88544e034a051baf472983791d233076
+# Source0-md5:	133b622d078bd3afc779f3f05237ec67
 Source1:	%{name}-rpmdeps.sh
 Patch0:		%{name}-without_ps_pdf.patch
 Patch1:		%{name}-eps.patch
@@ -21,7 +21,7 @@ BuildRequires:	docbook-dtd412-xml
 BuildRequires:	docbook-utils >= 0.6.10
 BuildRequires:	flex
 BuildRequires:	gettext-devel >= 0.11.5
-BuildRequires:	glib2-devel >= 1:2.12.0
+BuildRequires:	glib2-devel >= 1:2.18.0
 BuildRequires:	glibc-misc
 BuildRequires:	gnome-doc-tools
 BuildRequires:	gobject-introspection-devel >= 0.6.5
@@ -36,7 +36,7 @@ BuildRequires:	popt-devel >= 1.6.3
 BuildRequires:	python-PyXML
 BuildRequires:	transfig
 BuildRequires:	xmlto
-Requires:	glib2 >= 1:2.12.0
+Requires:	glib2 >= 1:2.18.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		vmajor		%(echo %{version} | cut -d. -f1,2)
@@ -66,7 +66,7 @@ Summary:	Include files for GStreamer streaming-media framework
 Summary(pl.UTF-8):	Pliki nagłówkowe do środowiska obróbki strumieni GStreamer
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	glib2-devel >= 1:2.12.0
+Requires:	glib2-devel >= 1:2.18.0
 Requires:	libxml2-devel >= 1:2.6.26
 Requires:	popt-devel >= 1.6.3
 Obsoletes:	gstreamer-plugins-bad-devel < 0.10.10
@@ -168,6 +168,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libgstreamer-0.10.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libgstreamer-0.10.so.0
 %dir %{_gstlibdir}
+%attr(755,root,root) %{_gstlibdir}/gst-plugin-scanner
 %attr(755,root,root) %{_gstlibdir}/libgstcoreelements.so
 %attr(755,root,root) %{_gstlibdir}/libgstcoreindexers.so
 %{_mandir}/man1/gst-*.1*
