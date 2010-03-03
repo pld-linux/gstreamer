@@ -1,100 +1,114 @@
---- a/tools/gst-inspect.c	17 Nov 2008 15:48:14 -0000	1.144
-+++ b/tools/gst-inspect.c	20 Jan 2009 16:11:05 -0000
-@@ -1262,9 +1262,219 @@ print_element_info (GstElementFactory * 
+From 3f3f59c66d5eaf0efd32b8d6dabb7895cba5dda6 Mon Sep 17 00:00:00 2001
+From: Bastien Nocera <hadess@hadess.net>
+Date: Wed, 11 Nov 2009 13:53:46 +0000
+Subject: [PATCH] Add RPM provides output to gst-inspect
+
+---
+ tools/gst-inspect.c |  272 ++++++++++++++++++++++++++++++++++++++++++++++++---
+ 1 files changed, 257 insertions(+), 15 deletions(-)
+
+diff --git a/tools/gst-inspect.c b/tools/gst-inspect.c
+index b2502f4..dfd2eb4 100644
+--- a/tools/gst-inspect.c
++++ b/tools/gst-inspect.c
+@@ -1308,9 +1308,225 @@ print_element_info (GstElementFactory * factory, gboolean print_names)
    return 0;
  }
  
 +static void
-+print_gst_structure_append_field (GList *strings, const char *field)
++print_gst_structure_append_field (GList * strings, const char *field)
 +{
-+	GList *s;
++  GList *s;
 +
-+	//g_message ("adding '%s' to the string", field);
++  //g_message ("adding '%s' to the string", field);
 +
-+	for (s = strings; s != NULL; s = s->next) {
-+		g_string_append (s->data, field);
-+	}
++  for (s = strings; s != NULL; s = s->next) {
++    g_string_append (s->data, field);
++  }
 +}
-+
-+static void
-+print_gst_structure_append_field_index (GList *strings, const char *field, guint num_items, guint offset)
+ 
+ static void
+-print_plugin_automatic_install_info_codecs (GstElementFactory * factory)
++print_gst_structure_append_field_index (GList * strings, const char *field,
++    guint num_items, guint offset)
 +{
-+	GList *s;
-+	guint i;
++  GList *s;
++  guint i;
 +
-+	//g_message ("adding '%s' to the string (num: %d offset: %d)", field, num_items, offset);
++  //g_message ("adding '%s' to the string (num: %d offset: %d)", field, num_items, offset);
 +
-+	for (s = strings, i = 0; s != NULL; s = s->next, i++) {
-+		if (i == offset) {
-+			//g_message ("adding '%s' at '%d'", field, i);
-+			g_string_append (s->data, field);
-+		}
-+		if (i == num_items)
-+			i = 0;
-+	}
++  for (s = strings, i = 0; s != NULL; s = s->next, i++) {
++    if (i == offset) {
++      //g_message ("adding '%s' at '%d'", field, i);
++      g_string_append (s->data, field);
++    }
++    if (i == num_items)
++      i = 0;
++  }
 +
 +}
 +
 +static GList *
-+print_gst_structure_dup_fields (GList *strings, guint num_items)
++print_gst_structure_dup_fields (GList * strings, guint num_items)
 +{
-+	guint new_items, i;
++  guint new_items, i;
 +
-+	if (num_items == 1)
-+		return strings;
++  if (num_items == 1)
++    return strings;
 +
-+	//g_message ("creating %d new items", num_items);
++  //g_message ("creating %d new items", num_items);
 +
-+	new_items = g_list_length (strings) * (num_items - 1);
-+	for (i = 0; i < new_items; i++) {
-+		GString *s, *first;
++  new_items = g_list_length (strings) * (num_items - 1);
++  for (i = 0; i < new_items; i++) {
++    GString *s, *first;
 +
-+		first = strings->data;
-+		s = g_string_new_len (first->str, first->len);
-+		strings = g_list_prepend (strings, s);
-+	}
++    first = strings->data;
++    s = g_string_new_len (first->str, first->len);
++    strings = g_list_prepend (strings, s);
++  }
 +
-+	return strings;
++  return strings;
 +}
 +
-+enum {
-+	FIELD_VERSION = 0,
-+	FIELD_LAYER,
-+	FIELD_VARIANT,
-+	FIELD_SYSTEMSTREAM
++enum
++{
++  FIELD_VERSION = 0,
++  FIELD_LAYER,
++  FIELD_VARIANT,
++  FIELD_SYSTEMSTREAM
 +};
 +
 +static int
 +field_get_type (const char *field_name)
 +{
-+	if (strstr (field_name, "version") != NULL)
-+		return FIELD_VERSION;
-+	if (strcmp (field_name, "layer") == 0)
-+		return FIELD_LAYER;
-+	if (strcmp (field_name, "systemstream") == 0)
-+		return FIELD_SYSTEMSTREAM;
-+	if (strcmp (field_name, "variant") == 0)
-+		return FIELD_VARIANT;
++  if (strstr (field_name, "version") != NULL)
++    return FIELD_VERSION;
++  if (strcmp (field_name, "layer") == 0)
++    return FIELD_LAYER;
++  if (strcmp (field_name, "systemstream") == 0)
++    return FIELD_SYSTEMSTREAM;
++  if (strcmp (field_name, "variant") == 0)
++    return FIELD_VARIANT;
 +
-+	return -1;
++  return -1;
 +}
 +
 +static gint
 +fields_type_compare (const char *a, const char *b)
 +{
-+	gint a_type, b_type;
++  gint a_type, b_type;
 +
-+	a_type = field_get_type (a);
-+	b_type = field_get_type (b);
-+	if (a_type < b_type)
-+		return -1;
-+	if (b_type < a_type)
-+		return 1;
-+	return 0;
++  a_type = field_get_type (a);
++  b_type = field_get_type (b);
++  if (a_type < b_type)
++    return -1;
++  if (b_type < a_type)
++    return 1;
++  return 0;
 +}
 +
 +static void
-+print_gst_structure_for_rpm (const char *type_name, GstStructure *s)
++print_gst_structure_for_rpm (const char *type_name, GstStructure * s)
 +{
 +  guint i, num_fields;
 +  const char *name;
@@ -111,11 +125,13 @@
 +
 +    field_name = gst_structure_nth_field_name (s, i);
 +    if (field_get_type (field_name) < 0) {
-+    	//g_message ("ignoring field named %s", field_name);
-+    	continue;
++      //g_message ("ignoring field named %s", field_name);
++      continue;
 +    }
 +
-+    fields = g_list_insert_sorted (fields, g_strdup (field_name), (GCompareFunc) fields_type_compare);
++    fields =
++        g_list_insert_sorted (fields, g_strdup (field_name),
++        (GCompareFunc) fields_type_compare);
 +  }
 +
 +  /* Example:
@@ -168,7 +184,8 @@
 +        char *field;
 +
 +        field = g_strdup_printf ("(%s=%d)", field_name, i);
-+        print_gst_structure_append_field_index (strings, field, max - min + 1, i - min);
++        print_gst_structure_append_field_index (strings, field, max - min + 1,
++            i - min);
 +        g_free (field);
 +      }
 +    } else if (type == GST_TYPE_LIST) {
@@ -184,9 +201,9 @@
 +        char *field;
 +        const GValue *item_value;
 +
-+	item_value = gst_value_list_get_value (value, i);
++        item_value = gst_value_list_get_value (value, i);
 +        field = g_strdup_printf ("(%s=%d)", field_name,
-+        			 g_value_get_int (item_value));
++            g_value_get_int (item_value));
 +        print_gst_structure_append_field_index (strings, field, num_items, i);
 +        g_free (field);
 +      }
@@ -214,14 +231,27 @@
 +  }
 +  g_list_free (strings);
 +}
- 
- static void
--print_plugin_automatic_install_info_codecs (GstElementFactory * factory)
-+print_plugin_automatic_install_info_codecs (GstElementFactory * factory, gboolean rpm_format)
++
++static void
++print_plugin_automatic_install_info_codecs (GstElementFactory * factory,
++    gboolean rpm_format)
  {
    GstPadDirection direction;
    const gchar *type_name;
-@@ -1325,15 +1535,19 @@ print_plugin_automatic_install_info_code
+@@ -1335,6 +1551,12 @@ print_plugin_automatic_install_info_codecs (GstElementFactory * factory)
+     return;
+   }
+ 
++  if (rpm_format) {
++    /* Ignore NONE ranked plugins */
++    if (GST_PLUGIN_FEATURE (factory)->rank == GST_RANK_NONE)
++      return;
++  }
++
+   /* decoder/demuxer sink pads should always be static and there should only
+    * be one, the same applies to encoders/muxers and source pads */
+   static_templates = gst_element_factory_get_static_pad_templates (factory);
+@@ -1371,15 +1593,20 @@ print_plugin_automatic_install_info_codecs (GstElementFactory * factory)
      gst_structure_remove_field (s, "rate");
      gst_structure_remove_field (s, "depth");
      gst_structure_remove_field (s, "clock-rate");
@@ -241,11 +271,12 @@
  
  static void
 -print_plugin_automatic_install_info_protocols (GstElementFactory * factory)
-+print_plugin_automatic_install_info_protocols (GstElementFactory * factory, gboolean rpm_format)
++print_plugin_automatic_install_info_protocols (GstElementFactory * factory,
++    gboolean rpm_format)
  {
    gchar **protocols, **p;
  
-@@ -1342,11 +1556,17 @@ print_plugin_automatic_install_info_prot
+@@ -1388,11 +1615,17 @@ print_plugin_automatic_install_info_protocols (GstElementFactory * factory)
      switch (gst_element_factory_get_uri_type (factory)) {
        case GST_URI_SINK:
          for (p = protocols; *p != NULL; ++p)
@@ -265,7 +296,7 @@
          break;
        default:
          break;
-@@ -1356,7 +1576,7 @@ print_plugin_automatic_install_info_prot
+@@ -1402,7 +1635,7 @@ print_plugin_automatic_install_info_protocols (GstElementFactory * factory)
  }
  
  static void
@@ -274,7 +305,7 @@
  {
    const gchar *plugin_name;
    GList *features, *l;
-@@ -1376,11 +1596,12 @@ print_plugin_automatic_install_info (Gst
+@@ -1422,11 +1655,12 @@ print_plugin_automatic_install_info (GstPlugin * plugin)
      if (g_str_equal (plugin_name, feature->plugin_name)) {
        GstElementFactory *factory;
  
@@ -290,25 +321,34 @@
      }
    }
  
-@@ -1394,6 +1615,7 @@ main (int argc, char *argv[])
-   gboolean print_all = FALSE;
+@@ -1446,7 +1680,7 @@ print_all_plugin_automatic_install_info (void)
+     plugin = (GstPlugin *) (plugins->data);
+     plugins = g_list_next (plugins);
+ 
+-    print_plugin_automatic_install_info (plugin);
++    print_plugin_automatic_install_info (plugin, FALSE);
+   }
+   gst_plugin_list_free (orig_plugins);
+ }
+@@ -1458,6 +1692,7 @@ main (int argc, char *argv[])
+   gboolean do_print_blacklist = FALSE;
    gboolean plugin_name = FALSE;
    gboolean print_aii = FALSE;
 +  gboolean print_aii_rpm = FALSE;
    gboolean uri_handlers = FALSE;
+ #ifndef GST_DISABLE_OPTION_PARSING
    GOptionEntry options[] = {
-     {"print-all", 'a', 0, G_OPTION_ARG_NONE, &print_all,
-@@ -1403,6 +1625,9 @@ main (int argc, char *argv[])
-               "provides.\n                                       "
+@@ -1470,6 +1705,9 @@ main (int argc, char *argv[])
+               "or all plugins provide.\n                                       "
                "Useful in connection with external automatic plugin "
                "installation mechanisms"), NULL},
 +    {"rpm", '\0', 0, G_OPTION_ARG_NONE, &print_aii_rpm,
-+       N_("Print the machine-parsable list of features of a plugin in RPM "
-+       	  "Provides compatible-format"), NULL},
++        N_("Print the machine-parsable list of features of a plugin in RPM "
++              "Provides compatible-format"), NULL},
      {"plugin", '\0', 0, G_OPTION_ARG_NONE, &plugin_name,
          N_("List the plugin contents"), NULL},
      {"uri-handlers", 'u', 0, G_OPTION_ARG_NONE, &uri_handlers,
-@@ -1478,7 +1703,7 @@ main (int argc, char *argv[])
+@@ -1557,7 +1795,7 @@ main (int argc, char *argv[])
        /* if there is such a plugin, print out info */
        if (plugin) {
          if (print_aii) {
@@ -317,7 +357,7 @@
          } else {
            print_plugin_info (plugin);
            print_plugin_features (plugin);
-@@ -1491,13 +1716,16 @@ main (int argc, char *argv[])
+@@ -1570,13 +1808,17 @@ main (int argc, char *argv[])
  
            if (plugin) {
              if (print_aii) {
@@ -331,8 +371,12 @@
 -            g_print (_("Could not load plugin file: %s\n"), error->message);
 +            if (!print_aii_rpm)
 +              g_print (_("Could not load plugin file: %s\n"), error->message);
-+	    else
-+              g_printerr (_("Could not load plugin file: %s\n"), error->message);
++            else
++              g_printerr (_("Could not load plugin file: %s\n"),
++                  error->message);
              g_error_free (error);
              return -1;
            }
+-- 
+1.6.5.2
+
