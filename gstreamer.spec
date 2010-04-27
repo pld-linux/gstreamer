@@ -1,12 +1,13 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	0.10.28
-Release:	2
+Version:	0.10.28.3
+Release:	1
 License:	LGPL v2+
 Group:		Libraries
-Source0:	http://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.bz2
-# Source0-md5:	1c7accac718fe211ff91323c27d4ae02
+#Source0:	http://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.bz2
+Source0:	http://gstreamer.freedesktop.org/src/gstreamer/pre/%{name}-%{version}.tar.bz2
+# Source0-md5:	0d046e7ba53ce7e70d78a4d7362c5fd9
 Source1:	%{name}-rpmdeps.sh
 Patch0:		%{name}-without_ps_pdf.patch
 Patch1:		%{name}-eps.patch
@@ -113,7 +114,7 @@ Dokumentacja API Gstreamera.
 # po/Makefile.in.in is modified
 #{__gettextize}
 %{__libtoolize}
-%{__aclocal} -I common/m4 -I .
+%{__aclocal} -I common/m4 -I m4 -I .
 %{__autoconf}
 %{__autoheader}
 %{__automake}
