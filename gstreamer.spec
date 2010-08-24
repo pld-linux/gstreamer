@@ -1,27 +1,27 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	0.10.29
-Release:	2
+Version:	0.10.30
+Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.bz2
-# Source0-md5:	c92d6bce4fc65fa9d5a3ad35cdd1a466
+# Source0-md5:	de01f73f71d97c5854badd363ca06509
 Source1:	%{name}-rpmdeps.sh
 Patch0:		%{name}-without_ps_pdf.patch
 Patch1:		%{name}-eps.patch
 Patch2:		%{name}-inspect-rpm-format.patch
+Patch3:		%{name}-make.patch
 URL:		http://gstreamer.net/
-BuildRequires:	autoconf >= 2.52
-BuildRequires:	automake >= 1.6
-BuildRequires:	bison >= 1.35
-BuildRequires:	check >= 0.9.3-2
+BuildRequires:	autoconf >= 2.60
+BuildRequires:	automake >= 1:1.10
+BuildRequires:	bison >= 1.875
 BuildRequires:	docbook-dtd30-sgml
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	docbook-utils >= 0.6.10
-BuildRequires:	flex
-BuildRequires:	gettext-devel >= 0.11.5
-BuildRequires:	glib2-devel >= 1:2.18.0
+BuildRequires:	flex >= 2.5.31
+BuildRequires:	gettext-devel >= 0.17
+BuildRequires:	glib2-devel >= 1:2.20.0
 BuildRequires:	glibc-misc
 BuildRequires:	gnome-doc-tools
 BuildRequires:	gobject-introspection-devel >= 0.6.5
@@ -31,12 +31,10 @@ BuildRequires:	libxml2-devel >= 1:2.6.26
 BuildRequires:	nasm
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig >= 1:0.9.0
-BuildRequires:	popt-devel >= 1.6.3
-# not sure it is a right place for this BR
-BuildRequires:	python-PyXML
+BuildRequires:	python >= 2.1
 BuildRequires:	transfig
 BuildRequires:	xmlto
-Requires:	glib2 >= 1:2.18.0
+Requires:	glib2 >= 1:2.20.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		vmajor		%(echo %{version} | cut -d. -f1,2)
@@ -66,9 +64,8 @@ Summary:	Include files for GStreamer streaming-media framework
 Summary(pl.UTF-8):	Pliki nagłówkowe do środowiska obróbki strumieni GStreamer
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	glib2-devel >= 1:2.18.0
+Requires:	glib2-devel >= 1:2.20.0
 Requires:	libxml2-devel >= 1:2.6.26
-Requires:	popt-devel >= 1.6.3
 Obsoletes:	gstreamer-plugins-bad-devel < 0.10.10
 
 %description devel
@@ -108,6 +105,7 @@ Dokumentacja API Gstreamera.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 # po/Makefile.in.in is modified
@@ -120,12 +118,13 @@ Dokumentacja API Gstreamera.
 %configure \
 	--disable-examples \
 	--disable-pspdf \
+	--disable-silent-rules \
 	--disable-tests \
 	--enable-docbook \
 	--enable-gtk-doc \
 	--with-html-dir=%{_gtkdocdir}
 
-%{__make} V=1
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
