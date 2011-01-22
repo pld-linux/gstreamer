@@ -20,7 +20,7 @@ BuildRequires:	docbook-dtd412-xml
 BuildRequires:	docbook-utils >= 0.6.10
 BuildRequires:	flex >= 2.5.31
 BuildRequires:	gettext-devel >= 0.17
-BuildRequires:	glib2-devel >= 1:2.20.0
+BuildRequires:	glib2-devel >= 1:2.22
 BuildRequires:	glibc-misc
 BuildRequires:	gnome-doc-tools
 BuildRequires:	gobject-introspection-devel >= 0.6.5
@@ -33,7 +33,7 @@ BuildRequires:	pkgconfig >= 1:0.9.0
 BuildRequires:	python >= 2.1
 BuildRequires:	transfig
 BuildRequires:	xmlto
-Requires:	glib2 >= 1:2.20.0
+Requires:	glib2 >= 1:2.22
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		vmajor		%(echo %{version} | cut -d. -f1,2)
@@ -63,7 +63,7 @@ Summary:	Include files for GStreamer streaming-media framework
 Summary(pl.UTF-8):	Pliki nagłówkowe do środowiska obróbki strumieni GStreamer
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	glib2-devel >= 1:2.20.0
+Requires:	glib2-devel >= 1:2.22
 Requires:	libxml2-devel >= 1:2.6.26
 Obsoletes:	gstreamer-plugins-bad-devel < 0.10.10
 
