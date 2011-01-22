@@ -1,12 +1,12 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	0.10.31
+Version:	0.10.32
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.bz2
-# Source0-md5:	a21fb08bdb578d972c7c14e77da8fbb6
+# Source0-md5:	442bc3d37b8511a73379143e7531d726
 Source1:	%{name}-rpmdeps.sh
 Patch0:		%{name}-without_ps_pdf.patch
 Patch1:		%{name}-eps.patch
@@ -139,8 +139,8 @@ mv $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/{manual,pwg} \
 
 %find_lang %{name} --all-name --with-gnome
 
-# no static modules and *.la for them - shut up check files
-rm -f $RPM_BUILD_ROOT%{_gstlibdir}/lib*.{la,a}
+# no *.la for modules - shut up check files
+%{__rm} $RPM_BUILD_ROOT%{_gstlibdir}/lib*.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
