@@ -1,19 +1,19 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	0.10.32
+Version:	0.10.34
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.bz2
-# Source0-md5:	442bc3d37b8511a73379143e7531d726
+# Source0-md5:	e6938af242cd002be9f0b6441e848d83
 Source1:	%{name}-rpmdeps.sh
 Patch0:		%{name}-without_ps_pdf.patch
 Patch1:		%{name}-eps.patch
 Patch2:		%{name}-inspect-rpm-format.patch
 URL:		http://gstreamer.net/
 BuildRequires:	autoconf >= 2.60
-BuildRequires:	automake >= 1:1.10
+BuildRequires:	automake >= 1:1.11
 BuildRequires:	bison >= 1.875
 BuildRequires:	docbook-dtd30-sgml
 BuildRequires:	docbook-dtd412-xml
