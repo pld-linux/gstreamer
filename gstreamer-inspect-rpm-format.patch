@@ -1,17 +1,17 @@
-From 3f3f59c66d5eaf0efd32b8d6dabb7895cba5dda6 Mon Sep 17 00:00:00 2001
+From e4a4294f53d25bc3b5699cace74de4f49062a2ee Mon Sep 17 00:00:00 2001
 From: Bastien Nocera <hadess@hadess.net>
 Date: Wed, 11 Nov 2009 13:53:46 +0000
 Subject: [PATCH] Add RPM provides output to gst-inspect
 
 ---
- tools/gst-inspect.c |  272 ++++++++++++++++++++++++++++++++++++++++++++++++---
- 1 files changed, 257 insertions(+), 15 deletions(-)
+ tools/gst-inspect.c |  275 ++++++++++++++++++++++++++++++++++++++++++++++++---
+ 1 files changed, 260 insertions(+), 15 deletions(-)
 
 diff --git a/tools/gst-inspect.c b/tools/gst-inspect.c
-index b2502f4..dfd2eb4 100644
+index c86285e..80b2456 100644
 --- a/tools/gst-inspect.c
 +++ b/tools/gst-inspect.c
-@@ -1308,9 +1308,225 @@ print_element_info (GstElementFactory * factory, gboolean print_names)
+@@ -1408,9 +1408,225 @@ print_element_info (GstElementFactory * factory, gboolean print_names)
    return 0;
  }
  
@@ -26,9 +26,8 @@ index b2502f4..dfd2eb4 100644
 +    g_string_append (s->data, field);
 +  }
 +}
- 
- static void
--print_plugin_automatic_install_info_codecs (GstElementFactory * factory)
++
++static void
 +print_gst_structure_append_field_index (GList * strings, const char *field,
 +    guint num_items, guint offset)
 +{
@@ -106,8 +105,9 @@ index b2502f4..dfd2eb4 100644
 +    return 1;
 +  return 0;
 +}
-+
-+static void
+ 
+ static void
+-print_plugin_automatic_install_info_codecs (GstElementFactory * factory)
 +print_gst_structure_for_rpm (const char *type_name, GstStructure * s)
 +{
 +  guint i, num_fields;
@@ -238,7 +238,7 @@ index b2502f4..dfd2eb4 100644
  {
    GstPadDirection direction;
    const gchar *type_name;
-@@ -1335,6 +1551,12 @@ print_plugin_automatic_install_info_codecs (GstElementFactory * factory)
+@@ -1435,6 +1651,12 @@ print_plugin_automatic_install_info_codecs (GstElementFactory * factory)
      return;
    }
  
@@ -251,7 +251,7 @@ index b2502f4..dfd2eb4 100644
    /* decoder/demuxer sink pads should always be static and there should only
     * be one, the same applies to encoders/muxers and source pads */
    static_templates = gst_element_factory_get_static_pad_templates (factory);
-@@ -1371,15 +1593,20 @@ print_plugin_automatic_install_info_codecs (GstElementFactory * factory)
+@@ -1471,15 +1693,20 @@ print_plugin_automatic_install_info_codecs (GstElementFactory * factory)
      gst_structure_remove_field (s, "rate");
      gst_structure_remove_field (s, "depth");
      gst_structure_remove_field (s, "clock-rate");
@@ -276,7 +276,7 @@ index b2502f4..dfd2eb4 100644
  {
    gchar **protocols, **p;
  
-@@ -1388,11 +1615,17 @@ print_plugin_automatic_install_info_protocols (GstElementFactory * factory)
+@@ -1488,11 +1715,17 @@ print_plugin_automatic_install_info_protocols (GstElementFactory * factory)
      switch (gst_element_factory_get_uri_type (factory)) {
        case GST_URI_SINK:
          for (p = protocols; *p != NULL; ++p)
@@ -296,7 +296,7 @@ index b2502f4..dfd2eb4 100644
          break;
        default:
          break;
-@@ -1402,7 +1635,7 @@ print_plugin_automatic_install_info_protocols (GstElementFactory * factory)
+@@ -1502,7 +1735,7 @@ print_plugin_automatic_install_info_protocols (GstElementFactory * factory)
  }
  
  static void
@@ -305,13 +305,16 @@ index b2502f4..dfd2eb4 100644
  {
    const gchar *plugin_name;
    GList *features, *l;
-@@ -1422,11 +1655,12 @@ print_plugin_automatic_install_info (GstPlugin * plugin)
+@@ -1522,11 +1755,15 @@ print_plugin_automatic_install_info (GstPlugin * plugin)
      if (g_str_equal (plugin_name, feature->plugin_name)) {
        GstElementFactory *factory;
  
 -      g_print ("element-%s\n", gst_plugin_feature_get_name (feature));
 +      if (!rpm_format)
 +        g_print ("element-%s\n", gst_plugin_feature_get_name (feature));
++      else
++        g_print ("gstreamer0.10(element-%s)\n",
++            gst_plugin_feature_get_name (feature));
  
        factory = GST_ELEMENT_FACTORY (feature);
 -      print_plugin_automatic_install_info_protocols (factory);
@@ -321,7 +324,7 @@ index b2502f4..dfd2eb4 100644
      }
    }
  
-@@ -1446,7 +1680,7 @@ print_all_plugin_automatic_install_info (void)
+@@ -1546,7 +1783,7 @@ print_all_plugin_automatic_install_info (void)
      plugin = (GstPlugin *) (plugins->data);
      plugins = g_list_next (plugins);
  
@@ -330,7 +333,7 @@ index b2502f4..dfd2eb4 100644
    }
    gst_plugin_list_free (orig_plugins);
  }
-@@ -1458,6 +1692,7 @@ main (int argc, char *argv[])
+@@ -1558,6 +1795,7 @@ main (int argc, char *argv[])
    gboolean do_print_blacklist = FALSE;
    gboolean plugin_name = FALSE;
    gboolean print_aii = FALSE;
@@ -338,7 +341,7 @@ index b2502f4..dfd2eb4 100644
    gboolean uri_handlers = FALSE;
  #ifndef GST_DISABLE_OPTION_PARSING
    GOptionEntry options[] = {
-@@ -1470,6 +1705,9 @@ main (int argc, char *argv[])
+@@ -1570,6 +1808,9 @@ main (int argc, char *argv[])
                "or all plugins provide.\n                                       "
                "Useful in connection with external automatic plugin "
                "installation mechanisms"), NULL},
@@ -348,7 +351,7 @@ index b2502f4..dfd2eb4 100644
      {"plugin", '\0', 0, G_OPTION_ARG_NONE, &plugin_name,
          N_("List the plugin contents"), NULL},
      {"uri-handlers", 'u', 0, G_OPTION_ARG_NONE, &uri_handlers,
-@@ -1557,7 +1795,7 @@ main (int argc, char *argv[])
+@@ -1658,7 +1899,7 @@ main (int argc, char *argv[])
        /* if there is such a plugin, print out info */
        if (plugin) {
          if (print_aii) {
@@ -357,7 +360,7 @@ index b2502f4..dfd2eb4 100644
          } else {
            print_plugin_info (plugin);
            print_plugin_features (plugin);
-@@ -1570,13 +1808,17 @@ main (int argc, char *argv[])
+@@ -1671,13 +1912,17 @@ main (int argc, char *argv[])
  
            if (plugin) {
              if (print_aii) {
@@ -378,5 +381,5 @@ index b2502f4..dfd2eb4 100644
              return -1;
            }
 -- 
-1.6.5.2
+1.7.4.1
 
