@@ -139,7 +139,8 @@ mv $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/{manual,pwg} \
 
 # no *.la for modules - shut up check files
 %{__rm} $RPM_BUILD_ROOT%{_gstlibdir}/lib*.la
-# *.la for libs kept - no .private dependencies in *.pc
+# obsoleted by pkg-config
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libgst*.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -150,7 +151,9 @@ rm -rf $RPM_BUILD_ROOT
 %files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog NEWS README TODO
-%attr(755,root,root) %{_bindir}/gst-*
+%attr(755,root,root) %{_bindir}/gst-inspect-1.0
+%attr(755,root,root) %{_bindir}/gst-launch-1.0
+%attr(755,root,root) %{_bindir}/gst-typefind-1.0
 %attr(755,root,root) %{_libdir}/libgstbase-%{vmajor}.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libgstbase-%{vmajor}.so.0
 %attr(755,root,root) %{_libdir}/libgstcheck-%{vmajor}.so.*.*.*
@@ -164,7 +167,9 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_gstlibdir}
 %attr(755,root,root) %{_gstlibdir}/gst-plugin-scanner
 %attr(755,root,root) %{_gstlibdir}/libgstcoreelements.so
-%{_mandir}/man1/gst-*.1*
+%{_mandir}/man1/gst-inspect-1.0.1*
+%{_mandir}/man1/gst-launch-1.0.1*
+%{_mandir}/man1/gst-typefind-1.0.1*
 %{_libdir}/girepository-1.0/Gst-%{vmajor}.typelib
 %{_libdir}/girepository-1.0/GstBase-%{vmajor}.typelib
 %{_libdir}/girepository-1.0/GstCheck-%{vmajor}.typelib
@@ -178,11 +183,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libgstcontroller-%{vmajor}.so
 %attr(755,root,root) %{_libdir}/libgstnet-%{vmajor}.so
 %attr(755,root,root) %{_libdir}/libgstreamer-%{vmajor}.so
-%{_libdir}/libgstbase-%{vmajor}.la
-%{_libdir}/libgstcheck-%{vmajor}.la
-%{_libdir}/libgstcontroller-%{vmajor}.la
-%{_libdir}/libgstnet-%{vmajor}.la
-%{_libdir}/libgstreamer-%{vmajor}.la
 %{_docdir}/%{name}-devel-%{version}
 %{_gstincludedir}
 %{_pkgconfigdir}/gstreamer-%{vmajor}.pc
