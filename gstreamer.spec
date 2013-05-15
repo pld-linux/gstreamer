@@ -132,7 +132,7 @@ install -d $RPM_BUILD_ROOT{%{_docdir}/%{name}-devel-%{version},%{rpmlibdir}}
 	DESTDIR=$RPM_BUILD_ROOT
 
 mv $RPM_BUILD_ROOT%{_docdir}/%{name}-{%{vmajor},%{version}}
-mv $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/{manual,pwg} \
+mv $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/{faq,manual,pwg} \
 	$RPM_BUILD_ROOT%{_docdir}/%{name}-devel-%{version}
 
 %find_lang %{name} --all-name --with-gnome
