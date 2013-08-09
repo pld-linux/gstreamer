@@ -1,0 +1,10 @@
+--- gstreamer-1.0.9/gst/parse/grammar.y.orig	2012-10-25 12:54:57.000000000 +0200
++++ gstreamer-1.0.9/gst/parse/grammar.y	2013-08-09 15:31:25.436287977 +0200
+@@ -657,6 +657,7 @@
+ %right '.'
+ %left '!' '='
+ 
++%lex-param { yyscan_t scanner }
+ %parse-param { void *scanner }
+ %parse-param { graph_t *graph }
+ %pure-parser
