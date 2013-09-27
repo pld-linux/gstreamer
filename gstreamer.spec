@@ -14,7 +14,7 @@ Patch0:		%{name}-without_ps_pdf.patch
 Patch1:		%{name}-eps.patch
 Patch2:		%{name}-inspect-rpm-format.patch
 URL:		http://gstreamer.net/
-BuildRequires:	autoconf >= 2.62
+BuildRequires:	autoconf >= 2.68
 BuildRequires:	automake >= 1:1.11
 BuildRequires:	bison >= 1.875
 BuildRequires:	docbook-dtd30-sgml
