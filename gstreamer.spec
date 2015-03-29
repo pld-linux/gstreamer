@@ -1,11 +1,11 @@
 #
 %define		vmajor		1.0
-#
+
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
 Version:	1.4.5
-Release:	2
+Release:	3
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.xz
@@ -91,6 +91,9 @@ Summary:	GStreamer API documentation
 Summary(pl.UTF-8):	Dokumentacja API Gstreamera
 Group:		Documentation
 Requires:	gtk-doc-common
+%if "%{_rpmversion}" >= "5"
+BuildArch:	noarch
+%endif
 
 %description apidocs
 GStreamer API documentation.
