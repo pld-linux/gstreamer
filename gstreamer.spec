@@ -1,21 +1,21 @@
-#
+# TODO: suid/capabilities for ptp-helper?
 %define		vmajor		1.0
 
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	1.4.5
-Release:	3
+Version:	1.6.0
+Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.xz
-# Source0-md5:	88a9289c64a4950ebb4f544980234289
+# Source0-md5:	201c15ac4b956833f7f6774485433969
 Patch0:		%{name}-without_ps_pdf.patch
 Patch1:		%{name}-eps.patch
 Patch2:		%{name}-inspect-rpm-format.patch
 URL:		http://gstreamer.net/
-BuildRequires:	autoconf >= 2.68
-BuildRequires:	automake >= 1:1.11
+BuildRequires:	autoconf >= 2.69
+BuildRequires:	automake >= 1:1.14
 BuildRequires:	bison >= 1.875
 BuildRequires:	docbook-dtd30-sgml
 BuildRequires:	docbook-dtd412-xml
@@ -27,7 +27,8 @@ BuildRequires:	glibc-misc
 BuildRequires:	gnome-doc-tools
 BuildRequires:	gobject-introspection-devel >= 1.31.1
 BuildRequires:	gtk-doc >= 1.12
-BuildRequires:	libtool >= 1.4
+BuildRequires:	libcap-devel
+BuildRequires:	libtool >= 2:2.2.6
 BuildRequires:	nasm
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig >= 1:0.9.0
@@ -101,6 +102,20 @@ GStreamer API documentation.
 %description apidocs -l pl.UTF-8
 Dokumentacja API Gstreamera.
 
+%package -n bash-completion-gstreamer
+Summary:	Bash completion for GStreamer utilities
+Summary(pl.UTF-8):	Bashowe uzupełnianie parametrów narzędzi GStreamera
+Group:		Applications/Shells
+Requires:	%{name} = %{version}-%{release}
+Requires:	bash-completion >= 2.0
+
+%description -n bash-completion-gstreamer
+Bash completion for GStreamer utilities: gst-inspect and gst-launch.
+
+%description -n bash-completion-gstreamer
+Bashowe uzupełnianie parametrów narzędzi GStreamera: gst-inspect oraz
+gst-launch.
+
 %prep
 %setup -q
 %patch0 -p1
@@ -169,6 +184,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %ghost %{_libdir}/libgstreamer-%{vmajor}.so.0
 %dir %{_gstlibdir}
 %attr(755,root,root) %{_gstlibdir}/gst-plugin-scanner
+%attr(755,root,root) %{_gstlibdir}/gst-ptp-helper
 %attr(755,root,root) %{_gstlibdir}/libgstcoreelements.so
 %{_mandir}/man1/gst-inspect-1.0.1*
 %{_mandir}/man1/gst-launch-1.0.1*
@@ -188,6 +204,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libgstreamer-%{vmajor}.so
 %{_docdir}/%{name}-devel-%{version}
 %{_gstincludedir}
+%{_gstlibdir}/include
 %{_pkgconfigdir}/gstreamer-%{vmajor}.pc
 %{_pkgconfigdir}/gstreamer-base-%{vmajor}.pc
 %{_pkgconfigdir}/gstreamer-check-%{vmajor}.pc
@@ -213,3 +230,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_gtkdocdir}/gstreamer-%{vmajor}
 %{_gtkdocdir}/gstreamer-libs-%{vmajor}
 %{_gtkdocdir}/gstreamer-plugins-%{vmajor}
+
+%files -n bash-completion-gstreamer
+%defattr(644,root,root,755)
+%{_datadir}/bash-completion/completions/gst-inspect-1.0
+%{_datadir}/bash-completion/completions/gst-launch-1.0
+%attr(755,root,root) %{_datadir}/bash-completion/helpers/gst
+%attr(755,root,root) %{_datadir}/bash-completion/helpers/gst-completion-helper-1.0
