@@ -4,12 +4,12 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	1.6.3
+Version:	1.8.0
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.xz
-# Source0-md5:	b4cdeb2b9cb20dd6ac022a4f417eae0d
+# Source0-md5:	6846d7289ec323c38c49b818171e955a
 Patch0:		%{name}-without_ps_pdf.patch
 Patch1:		%{name}-eps.patch
 Patch2:		%{name}-inspect-rpm-format.patch
@@ -22,7 +22,7 @@ BuildRequires:	docbook-dtd412-xml
 BuildRequires:	docbook-utils >= 0.6.10
 BuildRequires:	flex >= 2.5.31
 BuildRequires:	gettext-tools >= 0.17
-BuildRequires:	glib2-devel >= 1:2.32.0
+BuildRequires:	glib2-devel >= 1:2.40.0
 BuildRequires:	glibc-misc
 BuildRequires:	gnome-doc-tools
 BuildRequires:	gobject-introspection-devel >= 1.31.1
@@ -37,7 +37,7 @@ BuildRequires:	tar >= 1:1.22
 BuildRequires:	transfig
 BuildRequires:	xmlto
 BuildRequires:	xz
-Requires:	glib2 >= 1:2.32.0
+Requires:	glib2 >= 1:2.40.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_gstlibdir	%{_libdir}/gstreamer-%{vmajor}
@@ -64,7 +64,7 @@ Summary:	Include files for GStreamer streaming-media framework
 Summary(pl.UTF-8):	Pliki nagłówkowe do środowiska obróbki strumieni GStreamer
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	glib2-devel >= 1:2.32.0
+Requires:	glib2-devel >= 1:2.40.0
 Obsoletes:	gstreamer-plugins-bad-devel < 0.10.10
 
 %description devel
@@ -171,6 +171,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS ChangeLog MAINTAINERS NEWS README RELEASE
 %attr(755,root,root) %{_bindir}/gst-inspect-1.0
 %attr(755,root,root) %{_bindir}/gst-launch-1.0
+%attr(755,root,root) %{_bindir}/gst-stats-1.0
 %attr(755,root,root) %{_bindir}/gst-typefind-1.0
 %attr(755,root,root) %{_libdir}/libgstbase-%{vmajor}.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libgstbase-%{vmajor}.so.0
@@ -186,6 +187,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_gstlibdir}/gst-plugin-scanner
 %attr(755,root,root) %{_gstlibdir}/gst-ptp-helper
 %attr(755,root,root) %{_gstlibdir}/libgstcoreelements.so
+%attr(755,root,root) %{_gstlibdir}/libgstcoretracers.so
 %{_mandir}/man1/gst-inspect-1.0.1*
 %{_mandir}/man1/gst-launch-1.0.1*
 %{_mandir}/man1/gst-typefind-1.0.1*
@@ -233,7 +235,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n bash-completion-gstreamer
 %defattr(644,root,root,755)
-%{_datadir}/bash-completion/completions/gst-inspect-1.0
-%{_datadir}/bash-completion/completions/gst-launch-1.0
+%{bash_compdir}/gst-inspect-1.0
+%{bash_compdir}/gst-launch-1.0
 %attr(755,root,root) %{_datadir}/bash-completion/helpers/gst
 %attr(755,root,root) %{_datadir}/bash-completion/helpers/gst-completion-helper-1.0

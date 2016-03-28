@@ -369,6 +369,6 @@ diff -urp gstreamer-0.11.94.orig/tools/gst-inspect.c gstreamer-0.11.94/tools/gst
 +            else
 +              g_printerr (_("Could not load plugin file: %s\n"),
 +                  error->message);
-             g_error_free (error);
+             g_clear_error (&error);
              return -1;
            }
