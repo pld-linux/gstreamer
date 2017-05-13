@@ -4,38 +4,34 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	1.10.2
+Version:	1.12.0
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.xz
-# Source0-md5:	0d289e5bcec6353e6540ddb75b7d371b
-Patch0:		%{name}-without_ps_pdf.patch
-Patch1:		%{name}-eps.patch
-Patch2:		%{name}-inspect-rpm-format.patch
+# Source0-md5:	8f76b6b5e4b3307e505bd6ab9304dd03
+Patch0:		%{name}-inspect-rpm-format.patch
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	autoconf >= 2.69
 BuildRequires:	automake >= 1:1.14
 BuildRequires:	bison >= 1.875
-BuildRequires:	docbook-dtd30-sgml
 BuildRequires:	docbook-dtd412-xml
-BuildRequires:	docbook-utils >= 0.6.10
+BuildRequires:	elfutils-devel
 BuildRequires:	flex >= 2.5.31
 BuildRequires:	gettext-tools >= 0.17
 BuildRequires:	glib2-devel >= 1:2.40.0
 BuildRequires:	glibc-misc
-BuildRequires:	gnome-doc-tools
 BuildRequires:	gobject-introspection-devel >= 1.31.1
 BuildRequires:	gtk-doc >= 1.12
 BuildRequires:	libcap-devel
 BuildRequires:	libtool >= 2:2.2.6
-BuildRequires:	nasm
+%ifarch %{ix86} %{x8664} %{arm} hppa ia64 mips ppc ppc64 sh
+BuildRequires:	libunwind-devel
+%endif
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig >= 1:0.9.0
 BuildRequires:	python >= 2.1
 BuildRequires:	tar >= 1:1.22
-BuildRequires:	transfig
-BuildRequires:	xmlto
 BuildRequires:	xz
 Requires:	glib2 >= 1:2.40.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -119,8 +115,6 @@ gst-launch.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
 
 %build
 # po/Makefile.in.in is modified
@@ -132,10 +126,8 @@ gst-launch.
 %{__automake}
 %configure \
 	--disable-examples \
-	--disable-pspdf \
 	--disable-silent-rules \
 	--disable-tests \
-	--enable-docbook \
 	--enable-gtk-doc \
 	--with-html-dir=%{_gtkdocdir} \
 	--enable-static
@@ -144,14 +136,9 @@ gst-launch.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_docdir}/%{name}-devel-%{version},%{rpmlibdir}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
-
-mv $RPM_BUILD_ROOT%{_docdir}/%{name}-{%{vmajor},%{version}}
-mv $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/{faq,manual,pwg} \
-	$RPM_BUILD_ROOT%{_docdir}/%{name}-devel-%{version}
 
 %find_lang %{name} --all-name --with-gnome
 
@@ -204,7 +191,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libgstcontroller-%{vmajor}.so
 %attr(755,root,root) %{_libdir}/libgstnet-%{vmajor}.so
 %attr(755,root,root) %{_libdir}/libgstreamer-%{vmajor}.so
-%{_docdir}/%{name}-devel-%{version}
 %{_gstincludedir}
 %{_pkgconfigdir}/gstreamer-%{vmajor}.pc
 %{_pkgconfigdir}/gstreamer-base-%{vmajor}.pc
@@ -236,5 +222,5 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{bash_compdir}/gst-inspect-1.0
 %{bash_compdir}/gst-launch-1.0
+%attr(755,root,root) %{_gstlibdir}/gst-completion-helper
 %attr(755,root,root) %{_datadir}/bash-completion/helpers/gst
-%attr(755,root,root) %{_datadir}/bash-completion/helpers/gst-completion-helper-1.0
