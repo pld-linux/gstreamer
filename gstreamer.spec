@@ -4,12 +4,12 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	1.12.0
+Version:	1.12.2
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.xz
-# Source0-md5:	8f76b6b5e4b3307e505bd6ab9304dd03
+# Source0-md5:	4748860621607ffd96244fb79c86c238
 Patch0:		%{name}-inspect-rpm-format.patch
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	autoconf >= 2.69
@@ -177,6 +177,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_gstlibdir}/libgstcoretracers.so
 %{_mandir}/man1/gst-inspect-1.0.1*
 %{_mandir}/man1/gst-launch-1.0.1*
+%{_mandir}/man1/gst-stats-1.0.1*
 %{_mandir}/man1/gst-typefind-1.0.1*
 %{_libdir}/girepository-1.0/Gst-%{vmajor}.typelib
 %{_libdir}/girepository-1.0/GstBase-%{vmajor}.typelib
