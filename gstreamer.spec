@@ -4,12 +4,12 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	1.12.2
+Version:	1.12.4
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.xz
-# Source0-md5:	4748860621607ffd96244fb79c86c238
+# Source0-md5:	9d268f2e891cce1ac0832f1cc467d4ea
 Patch0:		%{name}-inspect-rpm-format.patch
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	autoconf >= 2.69
@@ -20,6 +20,9 @@ BuildRequires:	elfutils-devel
 BuildRequires:	flex >= 2.5.31
 BuildRequires:	gettext-tools >= 0.17
 BuildRequires:	glib2-devel >= 1:2.40.0
+%if %(locale -a | grep -q '^C\.UTF-8$'; echo $?)
+BuildRequires:	glibc-localedb-all
+%endif
 BuildRequires:	glibc-misc
 BuildRequires:	gobject-introspection-devel >= 1.31.1
 BuildRequires:	gtk-doc >= 1.12
@@ -132,6 +135,7 @@ gst-launch.
 	--with-html-dir=%{_gtkdocdir} \
 	--enable-static
 
+LC_ALL=C.UTF-8 \
 %{__make}
 
 %install
