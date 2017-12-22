@@ -5,7 +5,7 @@ Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
 Version:	1.12.4
-Release:	1
+Release:	2
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.xz
@@ -39,8 +39,9 @@ BuildRequires:	xz
 Requires:	glib2 >= 1:2.40.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_gstlibdir	%{_libdir}/gstreamer-%{vmajor}
-%define		_gstincludedir	%{_includedir}/gstreamer-%{vmajor}
+%define		gstlibdir	%{_libdir}/gstreamer-%{vmajor}
+%define		gstlibexecdir	%{_libexecdir}/gstreamer-%{vmajor}
+%define		gstincludedir	%{_includedir}/gstreamer-%{vmajor}
 
 %description
 GStreamer is a streaming-media framework, based on graphs of filters
@@ -147,7 +148,7 @@ rm -rf $RPM_BUILD_ROOT
 %find_lang %{name} --all-name --with-gnome
 
 # no *.la for modules - shut up check files
-%{__rm} $RPM_BUILD_ROOT%{_gstlibdir}/lib*.la
+%{__rm} $RPM_BUILD_ROOT%{gstlibdir}/lib*.la
 # obsoleted by pkg-config
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/libgst*.la
 
@@ -174,11 +175,14 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %ghost %{_libdir}/libgstnet-%{vmajor}.so.0
 %attr(755,root,root) %{_libdir}/libgstreamer-%{vmajor}.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libgstreamer-%{vmajor}.so.0
-%dir %{_gstlibdir}
-%attr(755,root,root) %{_gstlibdir}/gst-plugin-scanner
-%attr(755,root,root) %{_gstlibdir}/gst-ptp-helper
-%attr(755,root,root) %{_gstlibdir}/libgstcoreelements.so
-%attr(755,root,root) %{_gstlibdir}/libgstcoretracers.so
+%if "%{_libexecdir}" != "%{_libdir}"
+%dir %{gstlibexecdir}
+%endif
+%attr(755,root,root) %{gstlibexecdir}/gst-plugin-scanner
+%attr(755,root,root) %{gstlibexecdir}/gst-ptp-helper
+%dir %{gstlibdir}
+%attr(755,root,root) %{gstlibdir}/libgstcoreelements.so
+%attr(755,root,root) %{gstlibdir}/libgstcoretracers.so
 %{_mandir}/man1/gst-inspect-1.0.1*
 %{_mandir}/man1/gst-launch-1.0.1*
 %{_mandir}/man1/gst-stats-1.0.1*
@@ -196,7 +200,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libgstcontroller-%{vmajor}.so
 %attr(755,root,root) %{_libdir}/libgstnet-%{vmajor}.so
 %attr(755,root,root) %{_libdir}/libgstreamer-%{vmajor}.so
-%{_gstincludedir}
+%dir %{gstincludedir}
+%{gstincludedir}/gst
 %{_pkgconfigdir}/gstreamer-%{vmajor}.pc
 %{_pkgconfigdir}/gstreamer-base-%{vmajor}.pc
 %{_pkgconfigdir}/gstreamer-check-%{vmajor}.pc
@@ -227,5 +232,5 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{bash_compdir}/gst-inspect-1.0
 %{bash_compdir}/gst-launch-1.0
-%attr(755,root,root) %{_gstlibdir}/gst-completion-helper
+%attr(755,root,root) %{gstlibexecdir}/gst-completion-helper
 %attr(755,root,root) %{_datadir}/bash-completion/helpers/gst
