@@ -1,7 +1,7 @@
 diff -urp gstreamer-0.11.94.orig/tools/gst-inspect.c gstreamer-0.11.94/tools/gst-inspect.c
 --- gstreamer-0.11.94.orig/tools/gst-inspect.c	2012-09-01 18:02:10.000000000 -0400
 +++ gstreamer-0.11.94/tools/gst-inspect.c	2012-09-14 08:04:52.690369047 -0400
-@@ -1350,9 +1350,225 @@ print_element_info (GstElementFactory *
+@@ -1350,8 +1350,225 @@ print_element_info (GstElementFactory *
    return 0;
  }
  
@@ -220,7 +220,7 @@ diff -urp gstreamer-0.11.94.orig/tools/gst-inspect.c gstreamer-0.11.94/tools/gst
 +  }
 +  g_list_free (strings);
 +}
- 
++
  static void
 -print_plugin_automatic_install_info_codecs (GstElementFactory * factory)
 +print_plugin_automatic_install_info_codecs (GstElementFactory * factory,
