@@ -4,12 +4,12 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	1.14.3
+Version:	1.14.4
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.xz
-# Source0-md5:	c790c0d002164cafe93e67cdf78c8ace
+# Source0-md5:	f67fbbc42bd85a0701df119f52fb52bd
 Patch0:		%{name}-inspect-rpm-format.patch
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	autoconf >= 2.69
@@ -28,7 +28,7 @@ BuildRequires:	gobject-introspection-devel >= 1.31.1
 BuildRequires:	gtk-doc >= 1.12
 BuildRequires:	libcap-devel
 BuildRequires:	libtool >= 2:2.2.6
-%ifarch %{ix86} %{x8664} %{arm} hppa ia64 mips ppc ppc64 sh
+%ifarch %{ix86} %{x8664} x32 %{arm} hppa ia64 mips ppc ppc64 sh
 BuildRequires:	libunwind-devel
 %endif
 BuildRequires:	perl-base
@@ -147,8 +147,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %find_lang %{name} --all-name --with-gnome
 
-# no *.la for modules - shut up check files
-%{__rm} $RPM_BUILD_ROOT%{gstlibdir}/lib*.la
+# no *.la for modules nor static modules - shut up check files
+%{__rm} $RPM_BUILD_ROOT%{gstlibdir}/lib*.{la,a}
 # obsoleted by pkg-config
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/libgst*.la
 
