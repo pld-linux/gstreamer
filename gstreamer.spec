@@ -4,12 +4,12 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	1.14.4
-Release:	3
+Version:	1.16.0
+Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.xz
-# Source0-md5:	f67fbbc42bd85a0701df119f52fb52bd
+# Source0-md5:	862b7e4263d946bc2ef31b3c582e5587
 Patch0:		%{name}-inspect-rpm-format.patch
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	autoconf >= 2.69
@@ -103,6 +103,19 @@ GStreamer API documentation.
 %description apidocs -l pl.UTF-8
 Dokumentacja API Gstreamera.
 
+%package gdb
+Summary:	GStreamer pretty printers for GDB
+Summary(pl.UTF-8):	Funkcje wypisujące dane GStreamer dla GDB
+Group:		Development/Debuggers
+
+%description gdb
+This package contains Python scripts for GDB pretty printing of the
+GStreamer types.
+
+%description gdb -l pl.UTF-8
+Ten pakiet zawiera skrypty Pythona dla GDB służące do ładnego
+wypisywania typów GStreamer.
+
 %package -n bash-completion-gstreamer
 Summary:	Bash completion for GStreamer utilities
 Summary(pl.UTF-8):	Bashowe uzupełnianie parametrów narzędzi GStreamera
@@ -152,6 +165,10 @@ rm -rf $RPM_BUILD_ROOT
 %{__rm} $RPM_BUILD_ROOT%{gstlibdir}/lib*.{la,a}
 # obsoleted by pkg-config
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/libgst*.la
+
+%py_comp $RPM_BUILD_ROOT%{_datadir}/gstreamer-1.0/gdb/
+%py_ocomp $RPM_BUILD_ROOT%{_datadir}/gstreamer-1.0/gdb/
+%py_postclean %{_datadir}/gstreamer-1.0/gdb/
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -228,6 +245,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_gtkdocdir}/gstreamer-%{vmajor}
 %{_gtkdocdir}/gstreamer-libs-%{vmajor}
 %{_gtkdocdir}/gstreamer-plugins-%{vmajor}
+
+%files gdb
+%defattr(644,root,root,755)
+%{_datadir}/gdb/auto-load%{_libdir}/libgstreamer-%{vmajor}.so.*.*.*-gdb.py
+%{_datadir}/gstreamer-1.0/gdb
 
 %files -n bash-completion-gstreamer
 %defattr(644,root,root,755)
