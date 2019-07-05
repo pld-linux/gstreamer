@@ -1,5 +1,5 @@
 # TODO: suid/capabilities for ptp-helper?
-%define		vmajor		1.0
+%define		gstmver		1.0
 
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
@@ -39,9 +39,9 @@ BuildRequires:	xz
 Requires:	glib2 >= 1:2.40.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		gstlibdir	%{_libdir}/gstreamer-%{vmajor}
-%define		gstlibexecdir	%{_libexecdir}/gstreamer-%{vmajor}
-%define		gstincludedir	%{_includedir}/gstreamer-%{vmajor}
+%define		gstlibdir	%{_libdir}/gstreamer-%{gstmver}
+%define		gstlibexecdir	%{_libexecdir}/gstreamer-%{gstmver}
+%define		gstincludedir	%{_includedir}/gstreamer-%{gstmver}
 
 %description
 GStreamer is a streaming-media framework, based on graphs of filters
@@ -183,16 +183,16 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/gst-launch-1.0
 %attr(755,root,root) %{_bindir}/gst-stats-1.0
 %attr(755,root,root) %{_bindir}/gst-typefind-1.0
-%attr(755,root,root) %{_libdir}/libgstbase-%{vmajor}.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libgstbase-%{vmajor}.so.0
-%attr(755,root,root) %{_libdir}/libgstcheck-%{vmajor}.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libgstcheck-%{vmajor}.so.0
-%attr(755,root,root) %{_libdir}/libgstcontroller-%{vmajor}.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libgstcontroller-%{vmajor}.so.0
-%attr(755,root,root) %{_libdir}/libgstnet-%{vmajor}.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libgstnet-%{vmajor}.so.0
-%attr(755,root,root) %{_libdir}/libgstreamer-%{vmajor}.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libgstreamer-%{vmajor}.so.0
+%attr(755,root,root) %{_libdir}/libgstbase-%{gstmver}.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libgstbase-%{gstmver}.so.0
+%attr(755,root,root) %{_libdir}/libgstcheck-%{gstmver}.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libgstcheck-%{gstmver}.so.0
+%attr(755,root,root) %{_libdir}/libgstcontroller-%{gstmver}.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libgstcontroller-%{gstmver}.so.0
+%attr(755,root,root) %{_libdir}/libgstnet-%{gstmver}.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libgstnet-%{gstmver}.so.0
+%attr(755,root,root) %{_libdir}/libgstreamer-%{gstmver}.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libgstreamer-%{gstmver}.so.0
 %if "%{_libexecdir}" != "%{_libdir}"
 %dir %{gstlibexecdir}
 %endif
@@ -205,50 +205,50 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/gst-launch-1.0.1*
 %{_mandir}/man1/gst-stats-1.0.1*
 %{_mandir}/man1/gst-typefind-1.0.1*
-%{_libdir}/girepository-1.0/Gst-%{vmajor}.typelib
-%{_libdir}/girepository-1.0/GstBase-%{vmajor}.typelib
-%{_libdir}/girepository-1.0/GstCheck-%{vmajor}.typelib
-%{_libdir}/girepository-1.0/GstController-%{vmajor}.typelib
-%{_libdir}/girepository-1.0/GstNet-%{vmajor}.typelib
+%{_libdir}/girepository-1.0/Gst-%{gstmver}.typelib
+%{_libdir}/girepository-1.0/GstBase-%{gstmver}.typelib
+%{_libdir}/girepository-1.0/GstCheck-%{gstmver}.typelib
+%{_libdir}/girepository-1.0/GstController-%{gstmver}.typelib
+%{_libdir}/girepository-1.0/GstNet-%{gstmver}.typelib
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libgstbase-%{vmajor}.so
-%attr(755,root,root) %{_libdir}/libgstcheck-%{vmajor}.so
-%attr(755,root,root) %{_libdir}/libgstcontroller-%{vmajor}.so
-%attr(755,root,root) %{_libdir}/libgstnet-%{vmajor}.so
-%attr(755,root,root) %{_libdir}/libgstreamer-%{vmajor}.so
+%attr(755,root,root) %{_libdir}/libgstbase-%{gstmver}.so
+%attr(755,root,root) %{_libdir}/libgstcheck-%{gstmver}.so
+%attr(755,root,root) %{_libdir}/libgstcontroller-%{gstmver}.so
+%attr(755,root,root) %{_libdir}/libgstnet-%{gstmver}.so
+%attr(755,root,root) %{_libdir}/libgstreamer-%{gstmver}.so
 %dir %{gstincludedir}
 %{gstincludedir}/gst
-%{_pkgconfigdir}/gstreamer-%{vmajor}.pc
-%{_pkgconfigdir}/gstreamer-base-%{vmajor}.pc
-%{_pkgconfigdir}/gstreamer-check-%{vmajor}.pc
-%{_pkgconfigdir}/gstreamer-controller-%{vmajor}.pc
-%{_pkgconfigdir}/gstreamer-net-%{vmajor}.pc
-%{_aclocaldir}/gst-element-check-%{vmajor}.m4
-%{_datadir}/gir-1.0/Gst-%{vmajor}.gir
-%{_datadir}/gir-1.0/GstBase-%{vmajor}.gir
-%{_datadir}/gir-1.0/GstCheck-%{vmajor}.gir
-%{_datadir}/gir-1.0/GstController-%{vmajor}.gir
-%{_datadir}/gir-1.0/GstNet-%{vmajor}.gir
+%{_pkgconfigdir}/gstreamer-%{gstmver}.pc
+%{_pkgconfigdir}/gstreamer-base-%{gstmver}.pc
+%{_pkgconfigdir}/gstreamer-check-%{gstmver}.pc
+%{_pkgconfigdir}/gstreamer-controller-%{gstmver}.pc
+%{_pkgconfigdir}/gstreamer-net-%{gstmver}.pc
+%{_aclocaldir}/gst-element-check-%{gstmver}.m4
+%{_datadir}/gir-1.0/Gst-%{gstmver}.gir
+%{_datadir}/gir-1.0/GstBase-%{gstmver}.gir
+%{_datadir}/gir-1.0/GstCheck-%{gstmver}.gir
+%{_datadir}/gir-1.0/GstController-%{gstmver}.gir
+%{_datadir}/gir-1.0/GstNet-%{gstmver}.gir
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/libgstbase-%{vmajor}.a
-%{_libdir}/libgstcheck-%{vmajor}.a
-%{_libdir}/libgstcontroller-%{vmajor}.a
-%{_libdir}/libgstnet-%{vmajor}.a
-%{_libdir}/libgstreamer-%{vmajor}.a
+%{_libdir}/libgstbase-%{gstmver}.a
+%{_libdir}/libgstcheck-%{gstmver}.a
+%{_libdir}/libgstcontroller-%{gstmver}.a
+%{_libdir}/libgstnet-%{gstmver}.a
+%{_libdir}/libgstreamer-%{gstmver}.a
 
 %files apidocs
 %defattr(644,root,root,755)
-%{_gtkdocdir}/gstreamer-%{vmajor}
-%{_gtkdocdir}/gstreamer-libs-%{vmajor}
-%{_gtkdocdir}/gstreamer-plugins-%{vmajor}
+%{_gtkdocdir}/gstreamer-%{gstmver}
+%{_gtkdocdir}/gstreamer-libs-%{gstmver}
+%{_gtkdocdir}/gstreamer-plugins-%{gstmver}
 
 %files gdb
 %defattr(644,root,root,755)
-%{_datadir}/gdb/auto-load%{_libdir}/libgstreamer-%{vmajor}.so.*.*.*-gdb.py
+%{_datadir}/gdb/auto-load%{_libdir}/libgstreamer-%{gstmver}.so.*.*.*-gdb.py
 %{_datadir}/gstreamer-1.0/gdb
 
 %files -n bash-completion-gstreamer
