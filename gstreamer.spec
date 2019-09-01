@@ -5,7 +5,7 @@ Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
 Version:	1.16.0
-Release:	1
+Release:	2
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.xz
@@ -249,6 +249,7 @@ rm -rf $RPM_BUILD_ROOT
 %files gdb
 %defattr(644,root,root,755)
 %{_datadir}/gdb/auto-load%{_libdir}/libgstreamer-%{gstmver}.so.*.*.*-gdb.py
+%dir %{_datadir}/gstreamer-1.0
 %{_datadir}/gstreamer-1.0/gdb
 
 %files -n bash-completion-gstreamer
