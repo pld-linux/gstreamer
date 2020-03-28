@@ -1,0 +1,13 @@
+make 4.3 no longer recognizes '#' in macros as comment; use workaround to be compatible with old and current make
+--- gstreamer-1.16.2/common/gst-glib-gen.mak.orig	2019-04-19 11:16:18.000000000 +0200
++++ gstreamer-1.16.2/common/gst-glib-gen.mak	2020-03-28 20:29:17.924914360 +0100
+@@ -8,7 +8,8 @@
+ #glib_gen_decl_banner=GST_EXPORT
+ #glib_gen_decl_include=\#include <gst/foo/foo-prelude.h>
+ 
+-enum_headers=$(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++gst_hash=\#
++enum_headers=$(foreach h,$(glib_enum_headers),\n$(gst_hash)include \"$(h)\")
+ 
+ # these are all the rules generating the relevant files
+ $(glib_gen_basename)-marshal.h: $(glib_gen_basename)-marshal.list
