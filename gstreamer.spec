@@ -4,14 +4,13 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	1.16.2
+Version:	1.16.3
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.xz
-# Source0-md5:	0e661ed5bdf1d8996e430228d022628e
+# Source0-md5:	beecf6965a17fb17fa3b262fd36df70a
 Patch0:		%{name}-inspect-rpm-format.patch
-Patch1:		%{name}-make.patch
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	autoconf >= 2.69
 BuildRequires:	automake >= 1:1.14
@@ -35,6 +34,7 @@ BuildRequires:	libunwind-devel
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig >= 1:0.9.0
 BuildRequires:	python >= 2.1
+BuildRequires:	rpm-build >= 4.6
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
 Requires:	glib2 >= 1:2.40.0
@@ -132,7 +132,6 @@ gst-launch.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
 
 %build
 # po/Makefile.in.in is modified
