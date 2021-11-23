@@ -4,12 +4,12 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	1.16.3
-Release:	2
+Version:	1.19.3
+Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.xz
-# Source0-md5:	beecf6965a17fb17fa3b262fd36df70a
+# Source0-md5:	5af65dab2d400fbc5a9850b16bb5db05
 Patch0:		%{name}-inspect-rpm-format.patch
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	autoconf >= 2.69
@@ -25,7 +25,7 @@ BuildRequires:	glibc-localedb-all
 %endif
 BuildRequires:	glibc-misc
 BuildRequires:	gobject-introspection-devel >= 1.31.1
-BuildRequires:	gtk-doc >= 1.12
+BuildRequires:	hotdoc
 BuildRequires:	libcap-devel
 BuildRequires:	libtool >= 2:2.2.6
 %ifarch %{ix86} %{x8664} x32 %{arm} hppa ia64 mips ppc ppc64 sh
@@ -35,6 +35,7 @@ BuildRequires:	perl-base
 BuildRequires:	pkgconfig >= 1:0.9.0
 BuildRequires:	python >= 2.1
 BuildRequires:	rpm-build >= 4.6
+BuildRequires:	rpmbuild(macros) >= 1.726
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
 Requires:	glib2 >= 1:2.40.0
@@ -89,19 +90,6 @@ Static versions of GStreamer libraries.
 %description static -l pl.UTF-8
 Statyczne wersje bibliotek GStreamer.
 
-%package apidocs
-Summary:	GStreamer API documentation
-Summary(pl.UTF-8):	Dokumentacja API Gstreamera
-Group:		Documentation
-Requires:	gtk-doc-common
-BuildArch:	noarch
-
-%description apidocs
-GStreamer API documentation.
-
-%description apidocs -l pl.UTF-8
-Dokumentacja API Gstreamera.
-
 %package gdb
 Summary:	GStreamer pretty printers for GDB
 Summary(pl.UTF-8):	Funkcje wypisujące dane GStreamer dla GDB
@@ -133,37 +121,26 @@ gst-launch.
 %setup -q
 %patch0 -p1
 
-%build
-# po/Makefile.in.in is modified
-#{__gettextize}
-%{__libtoolize}
-%{__aclocal} -I common/m4 -I m4 -I .
-%{__autoconf}
-%{__autoheader}
-%{__automake}
-%configure \
-	--disable-examples \
-	--disable-silent-rules \
-	--disable-tests \
-	--enable-gtk-doc \
-	--with-html-dir=%{_gtkdocdir} \
-	--enable-static
+%{__sed} -E -i -e '1s,#!\s*/usr/bin/env\s+python3(\s|$),#!%{__python3}\1,' \
+      docs/gst-plugins-doc-cache-generator.py
 
-LC_ALL=C.UTF-8 \
-%{__make}
+%build
+%meson build \
+	-D doc=enabled \
+	-D tests=disabled \
+	-D examples=disabled
+
+%ninja_build -C build
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
+%ninja_install -C build
 
 %find_lang %{name} --all-name --with-gnome
 
-# no *.la for modules nor static modules - shut up check files
-%{__rm} $RPM_BUILD_ROOT%{gstlibdir}/lib*.{la,a}
-# obsoleted by pkg-config
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/libgst*.la
+# no static modules - shut up check files
+%{__rm} $RPM_BUILD_ROOT%{gstlibdir}/lib*.a
 
 %py_comp $RPM_BUILD_ROOT%{_datadir}/gstreamer-1.0/gdb/
 %py_ocomp $RPM_BUILD_ROOT%{_datadir}/gstreamer-1.0/gdb/
@@ -230,6 +207,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/gir-1.0/GstCheck-%{gstmver}.gir
 %{_datadir}/gir-1.0/GstController-%{gstmver}.gir
 %{_datadir}/gir-1.0/GstNet-%{gstmver}.gir
+%{_libdir}/gstreamer-1.0/pkgconfig/gstcoreelements.pc
+%{_libdir}/gstreamer-1.0/pkgconfig/gstcoretracers.pc
 
 %files static
 %defattr(644,root,root,755)
@@ -239,11 +218,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libgstnet-%{gstmver}.a
 %{_libdir}/libgstreamer-%{gstmver}.a
 
+%if 0
 %files apidocs
 %defattr(644,root,root,755)
 %{_gtkdocdir}/gstreamer-%{gstmver}
 %{_gtkdocdir}/gstreamer-libs-%{gstmver}
 %{_gtkdocdir}/gstreamer-plugins-%{gstmver}
+%endif
 
 %files gdb
 %defattr(644,root,root,755)
