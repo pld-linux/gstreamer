@@ -1,44 +1,48 @@
 # TODO: suid/capabilities for ptp-helper?
+#
+# Conditional build:
+%bcond_without	apidocs		# hotdoc based API documentation
+
 %define		gstmver		1.0
 
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
 Version:	1.19.3
-Release:	1
+Release:	2
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.xz
 # Source0-md5:	5af65dab2d400fbc5a9850b16bb5db05
 Patch0:		%{name}-inspect-rpm-format.patch
 URL:		https://gstreamer.freedesktop.org/
-BuildRequires:	autoconf >= 2.69
-BuildRequires:	automake >= 1:1.14
 BuildRequires:	bison >= 1.875
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	elfutils-devel
 BuildRequires:	flex >= 2.5.31
 BuildRequires:	gettext-tools >= 0.17
-BuildRequires:	glib2-devel >= 1:2.40.0
+BuildRequires:	glib2-devel >= 1:2.44.0
 %if %(locale -a | grep -q '^C\.UTF-8$'; echo $?)
 BuildRequires:	glibc-localedb-all
 %endif
 BuildRequires:	glibc-misc
 BuildRequires:	gobject-introspection-devel >= 1.31.1
-BuildRequires:	hotdoc
+%{?with_apidocs:BuildRequires:	hotdoc >= 0.11.0}
 BuildRequires:	libcap-devel
-BuildRequires:	libtool >= 2:2.2.6
 %ifarch %{ix86} %{x8664} x32 %{arm} hppa ia64 mips ppc ppc64 sh
 BuildRequires:	libunwind-devel
 %endif
+BuildRequires:	meson >= 0.48
+BuildRequires:	ninja >= 1.5
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig >= 1:0.9.0
-BuildRequires:	python >= 2.1
+BuildRequires:	python3 >= 1:3.2
 BuildRequires:	rpm-build >= 4.6
-BuildRequires:	rpmbuild(macros) >= 1.726
+BuildRequires:	rpmbuild(macros) >= 1.736
+BuildRequires:	sed >= 4.0
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
-Requires:	glib2 >= 1:2.40.0
+Requires:	glib2 >= 1:2.44.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		gstlibdir	%{_libdir}/gstreamer-%{gstmver}
@@ -66,7 +70,7 @@ Summary:	Include files for GStreamer streaming-media framework
 Summary(pl.UTF-8):	Pliki nagłówkowe do środowiska obróbki strumieni GStreamer
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	glib2-devel >= 1:2.40.0
+Requires:	glib2-devel >= 1:2.44.0
 Obsoletes:	gstreamer-plugins-bad-devel < 0.10.10
 Conflicts:	gstreamer-plugins-bad-devel < 1.14
 
@@ -89,6 +93,18 @@ Static versions of GStreamer libraries.
 
 %description static -l pl.UTF-8
 Statyczne wersje bibliotek GStreamer.
+
+%package apidocs
+Summary:	GStreamer API documentation
+Summary(pl.UTF-8):	Dokumentacja API GStreamera
+Group:		Documentation
+BuildArch:	noarch
+
+%description apidocs
+GStreamer API documentation.
+
+%description apidocs -l pl.UTF-8
+Dokumentacja API GStreamera.
 
 %package gdb
 Summary:	GStreamer pretty printers for GDB
@@ -121,16 +137,22 @@ gst-launch.
 %setup -q
 %patch0 -p1
 
-%{__sed} -E -i -e '1s,#!\s*/usr/bin/env\s+python3(\s|$),#!%{__python3}\1,' \
-      docs/gst-plugins-doc-cache-generator.py
+%{__sed} -i -e '1s,/usr/bin/env python3,%{__python3},' docs/gst-plugins-doc-cache-generator.py
 
 %build
 %meson build \
-	-D doc=enabled \
+	%{?with_apidocs:-Ddoc=enabled} \
 	-D tests=disabled \
 	-D examples=disabled
 
 %ninja_build -C build
+
+%if %{with apidocs}
+cd build/docs
+for component in base check controller coreelements coretracers gstreamer net ; do
+	LC_ALL=C.UTF-8 hotdoc run --conf-file ${component}-doc.json
+done
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -139,12 +161,16 @@ rm -rf $RPM_BUILD_ROOT
 
 %find_lang %{name} --all-name --with-gnome
 
+%py3_comp $RPM_BUILD_ROOT%{_datadir}/gstreamer-1.0/gdb
+%py3_ocomp $RPM_BUILD_ROOT%{_datadir}/gstreamer-1.0/gdb
+
 # no static modules - shut up check files
 %{__rm} $RPM_BUILD_ROOT%{gstlibdir}/lib*.a
 
-%py_comp $RPM_BUILD_ROOT%{_datadir}/gstreamer-1.0/gdb/
-%py_ocomp $RPM_BUILD_ROOT%{_datadir}/gstreamer-1.0/gdb/
-%py_postclean %{_datadir}/gstreamer-1.0/gdb/
+%if %{with apidocs}
+install -d $RPM_BUILD_ROOT%{_docdir}/gstreamer-%{gstmver}
+cp -pr build/docs/{base,check,controller,coreelements,coretracers,gstreamer,net}-doc $RPM_BUILD_ROOT%{_docdir}/gstreamer-%{gstmver}
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -177,6 +203,8 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{gstlibdir}
 %attr(755,root,root) %{gstlibdir}/libgstcoreelements.so
 %attr(755,root,root) %{gstlibdir}/libgstcoretracers.so
+# common for some plugins
+%dir %{_datadir}/gstreamer-1.0
 %{_mandir}/man1/gst-inspect-1.0.1*
 %{_mandir}/man1/gst-launch-1.0.1*
 %{_mandir}/man1/gst-stats-1.0.1*
@@ -189,11 +217,18 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
+%if %{with apidocs}
+%attr(755,root,root) %{gstlibexecdir}/gst-hotdoc-plugins-scanner
+%attr(755,root,root) %{gstlibexecdir}/gst-plugins-doc-cache-generator
+%endif
 %attr(755,root,root) %{_libdir}/libgstbase-%{gstmver}.so
 %attr(755,root,root) %{_libdir}/libgstcheck-%{gstmver}.so
 %attr(755,root,root) %{_libdir}/libgstcontroller-%{gstmver}.so
 %attr(755,root,root) %{_libdir}/libgstnet-%{gstmver}.so
 %attr(755,root,root) %{_libdir}/libgstreamer-%{gstmver}.so
+%dir %{gstlibdir}/pkgconfig
+%{gstlibdir}/pkgconfig/gstcoreelements.pc
+%{gstlibdir}/pkgconfig/gstcoretracers.pc
 %dir %{gstincludedir}
 %{gstincludedir}/gst
 %{_pkgconfigdir}/gstreamer-%{gstmver}.pc
@@ -207,8 +242,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/gir-1.0/GstCheck-%{gstmver}.gir
 %{_datadir}/gir-1.0/GstController-%{gstmver}.gir
 %{_datadir}/gir-1.0/GstNet-%{gstmver}.gir
-%{_libdir}/gstreamer-1.0/pkgconfig/gstcoreelements.pc
-%{_libdir}/gstreamer-1.0/pkgconfig/gstcoretracers.pc
 
 %files static
 %defattr(644,root,root,755)
@@ -218,18 +251,22 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libgstnet-%{gstmver}.a
 %{_libdir}/libgstreamer-%{gstmver}.a
 
-%if 0
+%if %{with apidocs}
 %files apidocs
 %defattr(644,root,root,755)
-%{_gtkdocdir}/gstreamer-%{gstmver}
-%{_gtkdocdir}/gstreamer-libs-%{gstmver}
-%{_gtkdocdir}/gstreamer-plugins-%{gstmver}
+%dir %{_docdir}/gstreamer-%{gstmver}
+%{_docdir}/gstreamer-%{gstmver}/base-doc
+%{_docdir}/gstreamer-%{gstmver}/check-doc
+%{_docdir}/gstreamer-%{gstmver}/controller-doc
+%{_docdir}/gstreamer-%{gstmver}/coreelements-doc
+%{_docdir}/gstreamer-%{gstmver}/coretracers-doc
+%{_docdir}/gstreamer-%{gstmver}/gstreamer-doc
+%{_docdir}/gstreamer-%{gstmver}/net-doc
 %endif
 
 %files gdb
 %defattr(644,root,root,755)
 %{_datadir}/gdb/auto-load%{_libdir}/libgstreamer-%{gstmver}.so.*.*.*-gdb.py
-%dir %{_datadir}/gstreamer-1.0
 %{_datadir}/gstreamer-1.0/gdb
 
 %files -n bash-completion-gstreamer
