@@ -16,12 +16,13 @@ Source0:	https://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.
 # Source0-md5:	5af65dab2d400fbc5a9850b16bb5db05
 Patch0:		%{name}-inspect-rpm-format.patch
 URL:		https://gstreamer.freedesktop.org/
+BuildRequires:	bash-completion-devel >= 2.0
 BuildRequires:	bison >= 1.875
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	elfutils-devel
 BuildRequires:	flex >= 2.5.31
 BuildRequires:	gettext-tools >= 0.17
-BuildRequires:	glib2-devel >= 1:2.44.0
+BuildRequires:	glib2-devel >= 1:2.56.0
 %if %(locale -a | grep -q '^C\.UTF-8$'; echo $?)
 BuildRequires:	glibc-localedb-all
 %endif
@@ -32,7 +33,7 @@ BuildRequires:	libcap-devel
 %ifarch %{ix86} %{x8664} x32 %{arm} hppa ia64 mips ppc ppc64 sh
 BuildRequires:	libunwind-devel
 %endif
-BuildRequires:	meson >= 0.48
+BuildRequires:	meson >= 0.59
 BuildRequires:	ninja >= 1.5
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig >= 1:0.9.0
@@ -42,7 +43,7 @@ BuildRequires:	rpmbuild(macros) >= 1.736
 BuildRequires:	sed >= 4.0
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
-Requires:	glib2 >= 1:2.44.0
+Requires:	glib2 >= 1:2.56.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		gstlibdir	%{_libdir}/gstreamer-%{gstmver}
@@ -70,7 +71,7 @@ Summary:	Include files for GStreamer streaming-media framework
 Summary(pl.UTF-8):	Pliki nagłówkowe do środowiska obróbki strumieni GStreamer
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	glib2-devel >= 1:2.44.0
+Requires:	glib2-devel >= 1:2.56.0
 Obsoletes:	gstreamer-plugins-bad-devel < 0.10.10
 Conflicts:	gstreamer-plugins-bad-devel < 1.14
 
