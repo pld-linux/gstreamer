@@ -15,6 +15,7 @@ Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.xz
 # Source0-md5:	0684f545cddd1f3141fbeec73935447b
 Patch0:		%{name}-inspect-rpm-format.patch
+Patch1:		%{name}-pc.patch
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	bash-completion-devel >= 2.0
 BuildRequires:	bison >= 1.875
@@ -137,6 +138,7 @@ gst-launch.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %{__sed} -i -e '1s,/usr/bin/env python3,%{__python3},' docs/gst-plugins-doc-cache-generator.py
 
