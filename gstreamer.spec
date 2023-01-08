@@ -8,16 +8,16 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	1.20.3
+Version:	1.20.5
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.xz
-# Source0-md5:	9c1aebfd5c182e60ca0eb8890b410a54
+# Source0-md5:	5e7669974dabe5e2481a8a37256b573e
 Patch0:		%{name}-inspect-rpm-format.patch
 Patch1:		%{name}-pc.patch
 URL:		https://gstreamer.freedesktop.org/
-BuildRequires:	bash-completion-devel >= 2.0
+BuildRequires:	bash-completion-devel >= 1:2.0
 BuildRequires:	bison >= 1.875
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	elfutils-devel
@@ -126,7 +126,7 @@ Summary:	Bash completion for GStreamer utilities
 Summary(pl.UTF-8):	Bashowe uzupełnianie parametrów narzędzi GStreamera
 Group:		Applications/Shells
 Requires:	%{name} = %{version}-%{release}
-Requires:	bash-completion >= 2.0
+Requires:	bash-completion >= 1:2.0
 
 %description -n bash-completion-gstreamer
 Bash completion for GStreamer utilities: gst-inspect and gst-launch.
