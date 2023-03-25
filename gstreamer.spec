@@ -8,14 +8,13 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	1.20.5
+Version:	1.22.1
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.xz
-# Source0-md5:	5e7669974dabe5e2481a8a37256b573e
+# Source0-md5:	3ed9648be775514c516c5dd8a267b27b
 Patch0:		%{name}-inspect-rpm-format.patch
-Patch1:		%{name}-pc.patch
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	bash-completion-devel >= 1:2.0
 BuildRequires:	bison >= 1.875
@@ -23,7 +22,7 @@ BuildRequires:	docbook-dtd412-xml
 BuildRequires:	elfutils-devel
 BuildRequires:	flex >= 2.5.31
 BuildRequires:	gettext-tools >= 0.17
-BuildRequires:	glib2-devel >= 1:2.56.0
+BuildRequires:	glib2-devel >= 1:2.62.0
 %if %(locale -a | grep -q '^C\.UTF-8$'; echo $?)
 BuildRequires:	glibc-localedb-all
 %endif
@@ -34,7 +33,7 @@ BuildRequires:	libcap-devel
 %ifarch %{ix86} %{x8664} x32 %{arm} hppa ia64 mips ppc ppc64 sh
 BuildRequires:	libunwind-devel
 %endif
-BuildRequires:	meson >= 0.59
+BuildRequires:	meson >= 0.62
 BuildRequires:	ninja >= 1.5
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig >= 1:0.9.0
@@ -44,7 +43,7 @@ BuildRequires:	rpmbuild(macros) >= 1.736
 BuildRequires:	sed >= 4.0
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
-Requires:	glib2 >= 1:2.56.0
+Requires:	glib2 >= 1:2.62.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		gstlibdir	%{_libdir}/gstreamer-%{gstmver}
@@ -72,7 +71,7 @@ Summary:	Include files for GStreamer streaming-media framework
 Summary(pl.UTF-8):	Pliki nagłówkowe do środowiska obróbki strumieni GStreamer
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	glib2-devel >= 1:2.56.0
+Requires:	glib2-devel >= 1:2.62.0
 Obsoletes:	gstreamer-plugins-bad-devel < 0.10.10
 Conflicts:	gstreamer-plugins-bad-devel < 1.14
 
@@ -138,7 +137,6 @@ gst-launch.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
 
 %{__sed} -i -e '1s,/usr/bin/env python3,%{__python3},' docs/gst-plugins-doc-cache-generator.py
 
