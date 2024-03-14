@@ -1,19 +1,20 @@
-# TODO: suid/capabilities for ptp-helper?
+# TODO: suid/capabilities for ptp-helper? (-Dptp-helper-permissions=capabilities or -Dptp-helper-setuid-user=/-Dptp-helper-setuid-group=)
 #
 # Conditional build:
 %bcond_without	apidocs		# hotdoc based API documentation
+%bcond_without	ptp_helper	# ptp-helper (requires rust)
 
 %define		gstmver		1.0
 
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	1.22.6
-Release:	2
+Version:	1.24.0
+Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.xz
-# Source0-md5:	62caa2c16550ea444f5d0eb09e0851f3
+# Source0-md5:	058ed34c39c7db77b9031be0eba6bdde
 Patch0:		%{name}-inspect-rpm-format.patch
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	bash-completion-devel >= 1:2.0
@@ -22,7 +23,7 @@ BuildRequires:	docbook-dtd412-xml
 BuildRequires:	elfutils-devel
 BuildRequires:	flex >= 2.5.31
 BuildRequires:	gettext-tools >= 0.17
-BuildRequires:	glib2-devel >= 1:2.62.0
+BuildRequires:	glib2-devel >= 1:2.64.0
 %if %(locale -a | grep -q '^C\.UTF-8$'; echo $?)
 BuildRequires:	glibc-localedb-all
 %endif
@@ -33,17 +34,18 @@ BuildRequires:	libcap-devel
 %ifarch %{ix86} %{x8664} x32 %{arm} hppa ia64 mips ppc ppc64 sh
 BuildRequires:	libunwind-devel
 %endif
-BuildRequires:	meson >= 0.62
+BuildRequires:	meson >= 1.1
 BuildRequires:	ninja >= 1.5
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig >= 1:0.9.0
 BuildRequires:	python3 >= 1:3.2
+%{?with_ptp_helper:BuildRequires:	rust >= 1.48}
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.736
 BuildRequires:	sed >= 4.0
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
-Requires:	glib2 >= 1:2.62.0
+Requires:	glib2 >= 1:2.64.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		gstlibdir	%{_libdir}/gstreamer-%{gstmver}
@@ -71,7 +73,7 @@ Summary:	Include files for GStreamer streaming-media framework
 Summary(pl.UTF-8):	Pliki nagłówkowe do środowiska obróbki strumieni GStreamer
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	glib2-devel >= 1:2.62.0
+Requires:	glib2-devel >= 1:2.64.0
 Obsoletes:	gstreamer-plugins-bad-devel < 0.10.10
 Conflicts:	gstreamer-plugins-bad-devel < 1.14
 
@@ -111,6 +113,8 @@ Dokumentacja API GStreamera.
 Summary:	GStreamer pretty printers for GDB
 Summary(pl.UTF-8):	Funkcje wypisujące dane GStreamer dla GDB
 Group:		Development/Debuggers
+Requires:	%{name} = %{version}-%{release}
+Requires:	gdb
 
 %description gdb
 This package contains Python scripts for GDB pretty printing of the
@@ -143,15 +147,18 @@ gst-launch.
 %build
 %meson build \
 	%{?with_apidocs:-Ddoc=enabled} \
-	-D tests=disabled \
-	-D examples=disabled
+	-Dexamples=disabled \
+	-Dtests=disabled
 
 %ninja_build -C build
 
 %if %{with apidocs}
 cd build/docs
-for component in base check controller coreelements coretracers gstreamer net ; do
+for component in base check controller gstreamer net ; do
 	LC_ALL=C.UTF-8 hotdoc run --conf-file ${component}-doc.json
+done
+for component in coreelements coretracers ; do
+	LC_ALL=C.UTF-8 hotdoc run --conf-file plugin-${component}.json
 done
 %endif
 
@@ -170,7 +177,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %if %{with apidocs}
 install -d $RPM_BUILD_ROOT%{_docdir}/gstreamer-%{gstmver}
-cp -pr build/docs/{base,check,controller,coreelements,coretracers,gstreamer,net}-doc $RPM_BUILD_ROOT%{_docdir}/gstreamer-%{gstmver}
+cp -pr build/docs/{base,check,controller,gstreamer,net}-doc $RPM_BUILD_ROOT%{_docdir}/gstreamer-%{gstmver}
+cp -pr build/docs/plugin-{coreelements,coretracers} $RPM_BUILD_ROOT%{_docdir}/gstreamer-%{gstmver}
 %endif
 
 %clean
@@ -200,7 +208,11 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{gstlibexecdir}
 %endif
 %attr(755,root,root) %{gstlibexecdir}/gst-plugin-scanner
+%if %{with ptp_helper}
+# %caps(cap_net_bind_service,cap_net_admin,cap_sys_nice=ep) ?
 %attr(755,root,root) %{gstlibexecdir}/gst-ptp-helper
+%attr(755,root,root) %{gstlibexecdir}/gst-ptp-helper-test
+%endif
 %dir %{gstlibdir}
 %attr(755,root,root) %{gstlibdir}/libgstcoreelements.so
 %attr(755,root,root) %{gstlibdir}/libgstcoretracers.so
@@ -259,10 +271,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_docdir}/gstreamer-%{gstmver}/base-doc
 %{_docdir}/gstreamer-%{gstmver}/check-doc
 %{_docdir}/gstreamer-%{gstmver}/controller-doc
-%{_docdir}/gstreamer-%{gstmver}/coreelements-doc
-%{_docdir}/gstreamer-%{gstmver}/coretracers-doc
 %{_docdir}/gstreamer-%{gstmver}/gstreamer-doc
 %{_docdir}/gstreamer-%{gstmver}/net-doc
+%{_docdir}/gstreamer-%{gstmver}/plugin-coreelements
+%{_docdir}/gstreamer-%{gstmver}/plugin-coretracers
 %endif
 
 %files gdb
