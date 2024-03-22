@@ -41,6 +41,7 @@ BuildRequires:	ninja >= 1.5
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig >= 1:0.9.0
 BuildRequires:	python3 >= 1:3.2
+BuildRequires:	python3-modules >= 1:3.2
 %{?with_ptp_helper:BuildRequires:	rust >= 1.48}
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.736
