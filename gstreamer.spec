@@ -17,6 +17,7 @@ Source0:	https://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.
 # Source0-md5:	058ed34c39c7db77b9031be0eba6bdde
 Patch0:		%{name}-inspect-rpm-format.patch
 URL:		https://gstreamer.freedesktop.org/
+BuildRequires:	automake
 BuildRequires:	bash-completion-devel >= 1:2.0
 BuildRequires:	bison >= 1.875
 BuildRequires:	docbook-dtd412-xml
