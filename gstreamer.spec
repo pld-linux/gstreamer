@@ -3,6 +3,7 @@
 # Conditional build:
 %bcond_without	apidocs		# hotdoc based API documentation
 %bcond_without	ptp_helper	# ptp-helper (requires rust)
+%bcond_without	static_libs	# static libraries
 
 %define		gstmver		1.0
 
@@ -147,6 +148,7 @@ gst-launch.
 
 %build
 %meson build \
+	%{!?with_static_libs:--default-library=shared} \
 	%{?with_apidocs:-Ddoc=enabled} \
 	-Dexamples=disabled \
 	-Dtests=disabled
@@ -174,8 +176,10 @@ rm -rf $RPM_BUILD_ROOT
 %py3_ocomp $RPM_BUILD_ROOT%{_datadir}/gstreamer-1.0/gdb
 
 # no static modules - shut up check files
+%if %{with static_libs}
 %{__rm} $RPM_BUILD_ROOT%{gstlibdir}/lib*.a
 %{__rm} $RPM_BUILD_ROOT%{gstlibdir}/pkgconfig/*.pc
+%endif
 
 %if %{with apidocs}
 install -d $RPM_BUILD_ROOT%{_docdir}/gstreamer-%{gstmver}
@@ -255,6 +259,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/gir-1.0/GstController-%{gstmver}.gir
 %{_datadir}/gir-1.0/GstNet-%{gstmver}.gir
 
+%if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libgstbase-%{gstmver}.a
@@ -262,6 +267,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libgstcontroller-%{gstmver}.a
 %{_libdir}/libgstnet-%{gstmver}.a
 %{_libdir}/libgstreamer-%{gstmver}.a
+%endif
 
 %if %{with apidocs}
 %files apidocs
