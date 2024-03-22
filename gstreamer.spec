@@ -175,6 +175,7 @@ rm -rf $RPM_BUILD_ROOT
 
 # no static modules - shut up check files
 %{__rm} $RPM_BUILD_ROOT%{gstlibdir}/lib*.a
+%{__rm} $RPM_BUILD_ROOT%{gstlibdir}/pkgconfig/*.pc
 
 %if %{with apidocs}
 install -d $RPM_BUILD_ROOT%{_docdir}/gstreamer-%{gstmver}
@@ -240,9 +241,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libgstcontroller-%{gstmver}.so
 %attr(755,root,root) %{_libdir}/libgstnet-%{gstmver}.so
 %attr(755,root,root) %{_libdir}/libgstreamer-%{gstmver}.so
-%dir %{gstlibdir}/pkgconfig
-%{gstlibdir}/pkgconfig/gstcoreelements.pc
-%{gstlibdir}/pkgconfig/gstcoretracers.pc
 %dir %{gstincludedir}
 %{gstincludedir}/gst
 %{_pkgconfigdir}/gstreamer-%{gstmver}.pc
