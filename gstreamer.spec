@@ -10,12 +10,12 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	1.24.0
+Version:	1.24.1
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.xz
-# Source0-md5:	058ed34c39c7db77b9031be0eba6bdde
+# Source0-md5:	15ae9ea00a28bf326123667ea57fd34f
 Patch0:		%{name}-inspect-rpm-format.patch
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	automake
@@ -218,7 +218,6 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with ptp_helper}
 # %caps(cap_net_bind_service,cap_net_admin,cap_sys_nice=ep) ?
 %attr(755,root,root) %{gstlibexecdir}/gst-ptp-helper
-%attr(755,root,root) %{gstlibexecdir}/gst-ptp-helper-test
 %endif
 %dir %{gstlibdir}
 %attr(755,root,root) %{gstlibdir}/libgstcoreelements.so

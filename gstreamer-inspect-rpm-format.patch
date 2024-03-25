@@ -346,8 +346,8 @@ index 8da042946..a057cba09 100644
 +  gboolean print_aii_rpm = FALSE;
    gboolean uri_handlers = FALSE;
    gboolean check_exists = FALSE;
-   gboolean color_always = FALSE;
-@@ -2190,6 +2430,9 @@ real_main (int argc, char *argv[])
+   gboolean check_version = FALSE;
+@@ -2191,6 +2431,9 @@ real_main (int argc, char *argv[])
                "or all plugins provide.\n                                       "
                "Useful in connection with external automatic plugin "
                "installation mechanisms"), NULL},
@@ -357,7 +357,7 @@ index 8da042946..a057cba09 100644
      {"plugin", '\0', 0, G_OPTION_ARG_NONE, &plugin_name,
          N_("List the plugin contents"), NULL},
      {"types", 't', 0, G_OPTION_ARG_STRING, &types,
-@@ -2364,7 +2607,7 @@ real_main (int argc, char *argv[])
+@@ -2370,7 +2613,7 @@ real_main (int argc, char *argv[])
        /* if there is such a plugin, print out info */
        if (plugin) {
          if (print_aii) {
@@ -366,7 +366,7 @@ index 8da042946..a057cba09 100644
          } else {
            print_plugin_info (plugin);
            print_plugin_status (plugin);
-@@ -2378,13 +2621,16 @@ real_main (int argc, char *argv[])
+@@ -2384,13 +2627,16 @@ real_main (int argc, char *argv[])
  
            if (plugin) {
              if (print_aii) {
