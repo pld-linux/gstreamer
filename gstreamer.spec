@@ -10,12 +10,12 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	1.24.8
+Version:	1.24.12
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.xz
-# Source0-md5:	aed9681c3dcf4ccec6adba6e865ee9a3
+# Source0-md5:	8bfc0b9b4e2467170a66e256d4846f9c
 Patch0:		%{name}-inspect-rpm-format.patch
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	automake
@@ -44,7 +44,7 @@ BuildRequires:	python3 >= 1:3.2
 BuildRequires:	python3-modules >= 1:3.2
 %{?with_ptp_helper:BuildRequires:	rust >= 1.48}
 BuildRequires:	rpm-build >= 4.6
-BuildRequires:	rpmbuild(macros) >= 1.736
+BuildRequires:	rpmbuild(macros) >= 2.042
 BuildRequires:	sed >= 4.0
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
@@ -148,13 +148,14 @@ gst-launch.
 %{__sed} -i -e '1s,/usr/bin/env python3,%{__python3},' docs/gst-plugins-doc-cache-generator.py
 
 %build
-%meson build \
+%meson \
 	%{!?with_static_libs:--default-library=shared} \
+	-Ddbghelp=disabled \
 	%{?with_apidocs:-Ddoc=enabled} \
 	-Dexamples=disabled \
 	-Dtests=disabled
 
-%ninja_build -C build
+%meson_build
 
 %if %{with apidocs}
 cd build/docs
@@ -169,7 +170,7 @@ done
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%ninja_install -C build
+%meson_install
 
 %find_lang %{name} --all-name --with-gnome
 
