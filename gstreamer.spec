@@ -143,7 +143,7 @@ gst-launch.
 
 %prep
 %setup -q
-%patch0 -p1
+%patch -P0 -p1
 
 %{__sed} -i -e '1s,/usr/bin/env python3,%{__python3},' docs/gst-plugins-doc-cache-generator.py
 
