@@ -148,6 +148,7 @@ gst-launch.
 %{__sed} -i -e '1s,/usr/bin/env python3,%{__python3},' docs/gst-plugins-doc-cache-generator.py
 
 %build
+export RUSTFLAGS="%{rpmrustflags} --target=%{rust_target}"
 %meson \
 	%{!?with_static_libs:--default-library=shared} \
 	-Ddbghelp=disabled \
