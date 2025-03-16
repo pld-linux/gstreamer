@@ -10,12 +10,12 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	1.24.12
+Version:	1.26.0
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.xz
-# Source0-md5:	8bfc0b9b4e2467170a66e256d4846f9c
+# Source0-md5:	61fa71e6a65f23fbf508422af5096f4a
 Patch0:		%{name}-inspect-rpm-format.patch
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	automake
@@ -36,7 +36,7 @@ BuildRequires:	libcap-devel
 %ifarch %{ix86} %{x8664} x32 %{arm} hppa ia64 mips ppc ppc64 sh
 BuildRequires:	libunwind-devel
 %endif
-BuildRequires:	meson >= 1.1
+BuildRequires:	meson >= 1.4
 BuildRequires:	ninja >= 1.5
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig >= 1:0.9.0
@@ -151,14 +151,28 @@ gst-launch.
 export RUSTFLAGS="%{rpmrustflags} --target=%{rust_target}"
 %meson \
 	%{!?with_static_libs:--default-library=shared} \
+	-Dbash-completion=enabled \
+	-Dbenchmarks=disabled \
+	-Dcheck=enabled \
+	-Dcoretracers=enabled \
 	-Ddbghelp=disabled \
-	%{?with_apidocs:-Ddoc=enabled} \
+	-Ddoc=%{__enabled_disabled apidocs} \
 	-Dexamples=disabled \
-	-Dtests=disabled
+	-Dglib_assert=disabled \
+	-Dglib_checks=disabled \
+	-Dglib_debug=disabled \
+	-Dintrospection=enabled \
+	-Dlibdw=enabled \
+	-Dlibunwind=enabled \
+	-Dnls=enabled \
+	-Dtests=disabled \
+	-Dtools=enabled
 
 %meson_build
 
 %if %{with apidocs}
+%meson_build build-gst-hotdoc-configs build-libs-hotdoc-configs build-hotdoc-configs
+
 cd build/docs
 for component in base check controller gstreamer net ; do
 	LC_ALL=C.UTF-8 hotdoc run --conf-file ${component}-doc.json
@@ -249,17 +263,18 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libgstreamer-%{gstmver}.so
 %dir %{gstincludedir}
 %{gstincludedir}/gst
+%{_datadir}/gir-1.0/Gst-%{gstmver}.gir
+%{_datadir}/gir-1.0/GstBase-%{gstmver}.gir
+%{_datadir}/gir-1.0/GstCheck-%{gstmver}.gir
+%{_datadir}/gir-1.0/GstController-%{gstmver}.gir
+%{_datadir}/gir-1.0/GstNet-%{gstmver}.gir
 %{_pkgconfigdir}/gstreamer-%{gstmver}.pc
 %{_pkgconfigdir}/gstreamer-base-%{gstmver}.pc
 %{_pkgconfigdir}/gstreamer-check-%{gstmver}.pc
 %{_pkgconfigdir}/gstreamer-controller-%{gstmver}.pc
 %{_pkgconfigdir}/gstreamer-net-%{gstmver}.pc
 %{_aclocaldir}/gst-element-check-%{gstmver}.m4
-%{_datadir}/gir-1.0/Gst-%{gstmver}.gir
-%{_datadir}/gir-1.0/GstBase-%{gstmver}.gir
-%{_datadir}/gir-1.0/GstCheck-%{gstmver}.gir
-%{_datadir}/gir-1.0/GstController-%{gstmver}.gir
-%{_datadir}/gir-1.0/GstNet-%{gstmver}.gir
+%{_datadir}/cmake/FindGStreamer.cmake
 
 %if %{with static_libs}
 %files static
