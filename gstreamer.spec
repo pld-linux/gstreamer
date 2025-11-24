@@ -47,10 +47,11 @@ BuildRequires:	python3 >= 1:3.2
 BuildRequires:	python3-modules >= 1:3.2
 %{?with_ptp_helper:BuildRequires:	rust >= 1.48}
 BuildRequires:	rpm-build >= 4.6
-BuildRequires:	rpmbuild(macros) >= 2.042
+BuildRequires:	rpmbuild(macros) >= 2.050
 BuildRequires:	sed >= 4.0
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
+%{?with_ptp_helper:%{?rust_req}}
 Requires:	glib2 >= 1:2.64.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
