@@ -10,12 +10,12 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	1.26.0
+Version:	1.26.8
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.xz
-# Source0-md5:	61fa71e6a65f23fbf508422af5096f4a
+# Source0-md5:	df404f31119f7c7811e8e6414cfa72c3
 Patch0:		%{name}-inspect-rpm-format.patch
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	automake
@@ -32,6 +32,9 @@ BuildRequires:	glibc-localedb-all
 BuildRequires:	glibc-misc
 BuildRequires:	gobject-introspection-devel >= 1.31.1
 %{?with_apidocs:BuildRequires:	hotdoc >= 0.11.0}
+%ifnarch %arch_with_atomics64
+BuildRequires:	libatomic-devel
+%endif
 BuildRequires:	libcap-devel
 %ifarch %{ix86} %{x8664} x32 %{arm} hppa ia64 mips ppc ppc64 sh
 BuildRequires:	libunwind-devel
