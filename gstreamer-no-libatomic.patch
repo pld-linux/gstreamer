@@ -1,0 +1,11 @@
+--- gstreamer-1.28.3/meson.build.orig	2026-06-04 08:19:12.725538455 +0200
++++ gstreamer-1.28.3/meson.build	2026-06-04 08:19:24.472141485 +0200
+@@ -584,8 +584,6 @@ rt_lib = cc.find_library('rt', required
+ # to link explicitly to this library.
+ # TODO: Once meson 1.7 is in use, this can be updated to
+ # dependency('atomic')
+-atomic_dep = cc.find_library('atomic', required: false)
+-platform_deps += atomic_dep
+ 
+ gir = find_program('g-ir-scanner', required : get_option('introspection'),
+     default_options: {'cairo': 'disabled'})

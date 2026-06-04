@@ -1,0 +1,24 @@
+--- gstreamer-1.28.3/meson.build.orig	2026-06-04 08:17:15.899504690 +0200
++++ gstreamer-1.28.3/meson.build	2026-06-04 08:19:01.502265924 +0200
+@@ -580,21 +580,7 @@ mathlib = cc.find_library('m', required
+ # Also provides clock_gettime in glibc < 2.17
+ rt_lib = cc.find_library('rt', required : false)
+ 
+-#
+-# Solaris and Illumos distros split a lot of networking-related code
+-# into '-lsocket -lnsl'.  Anything that calls socketpair(), getifaddr(),
+-# etc. probably needs to include network_deps
+-#
+-socket_lib = cc.find_library('socket', required: false)
+-nsl_lib    = cc.find_library('nsl',    required: false)
+ network_deps = []
+-if socket_lib.found()
+-  network_deps += socket_lib
+-endif
+-if nsl_lib.found()
+-  network_deps += nsl_lib
+-endif
+-
+ # Check for libatomic for use of C11 atomics: some architectures need
+ # to link explicitly to this library.
+ # TODO: Once meson 1.7 is in use, this can be updated to

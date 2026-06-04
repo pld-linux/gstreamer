@@ -1,4 +1,3 @@
-# TODO: suid/capabilities for ptp-helper? (-Dptp-helper-permissions=capabilities or -Dptp-helper-setuid-user=/-Dptp-helper-setuid-group=)
 #
 # Conditional build:
 %bcond_without	apidocs		# hotdoc based API documentation
@@ -10,17 +9,19 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	1.26.8
+Version:	1.28.3
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.xz
-# Source0-md5:	df404f31119f7c7811e8e6414cfa72c3
+# Source0-md5:	a2cb777530dce369316a71bcab116907
 Patch0:		%{name}-inspect-rpm-format.patch
+Patch1:		%{name}-no-libnsl.patch
+Patch2:		%{name}-no-libatomic.patch
 URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	automake
 BuildRequires:	bash-completion-devel >= 1:2.0
-BuildRequires:	bison >= 1.875
+BuildRequires:	bison >= 2.4
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	elfutils-devel
 BuildRequires:	flex >= 2.5.31
@@ -148,6 +149,10 @@ gst-launch.
 %prep
 %setup -q
 %patch -P0 -p1
+%patch -P1 -p1
+%ifarch %arch_with_atomics64
+%patch -P2 -p1
+%endif
 
 %{__sed} -i -e '1s,/usr/bin/env python3,%{__python3},' docs/gst-plugins-doc-cache-generator.py
 
@@ -163,12 +168,14 @@ export RUSTFLAGS="%{rpmrustflags} --target=%{rust_target}"
 	-Ddoc=%{__enabled_disabled apidocs} \
 	-Dexamples=disabled \
 	-Dglib_assert=disabled \
-	-Dglib_checks=disabled \
+	-Dglib_checks=false \
 	-Dglib_debug=disabled \
 	-Dintrospection=enabled \
 	-Dlibdw=enabled \
 	-Dlibunwind=enabled \
 	-Dnls=enabled \
+	-Dptp-helper=%{__enabled_disabled ptp_helper} \
+	-Dptp-helper-permissions=capabilities \
 	-Dtests=disabled \
 	-Dtools=enabled
 
@@ -216,32 +223,31 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog MAINTAINERS NEWS README.md RELEASE
+%doc ChangeLog MAINTAINERS README.md RELEASE
 %attr(755,root,root) %{_bindir}/gst-inspect-1.0
 %attr(755,root,root) %{_bindir}/gst-launch-1.0
 %attr(755,root,root) %{_bindir}/gst-stats-1.0
 %attr(755,root,root) %{_bindir}/gst-typefind-1.0
-%attr(755,root,root) %{_libdir}/libgstbase-%{gstmver}.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libgstbase-%{gstmver}.so.0
-%attr(755,root,root) %{_libdir}/libgstcheck-%{gstmver}.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libgstcheck-%{gstmver}.so.0
-%attr(755,root,root) %{_libdir}/libgstcontroller-%{gstmver}.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libgstcontroller-%{gstmver}.so.0
-%attr(755,root,root) %{_libdir}/libgstnet-%{gstmver}.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libgstnet-%{gstmver}.so.0
-%attr(755,root,root) %{_libdir}/libgstreamer-%{gstmver}.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libgstreamer-%{gstmver}.so.0
+%{_libdir}/libgstbase-%{gstmver}.so.*.*.*
+%ghost %{_libdir}/libgstbase-%{gstmver}.so.0
+%{_libdir}/libgstcheck-%{gstmver}.so.*.*.*
+%ghost %{_libdir}/libgstcheck-%{gstmver}.so.0
+%{_libdir}/libgstcontroller-%{gstmver}.so.*.*.*
+%ghost %{_libdir}/libgstcontroller-%{gstmver}.so.0
+%{_libdir}/libgstnet-%{gstmver}.so.*.*.*
+%ghost %{_libdir}/libgstnet-%{gstmver}.so.0
+%{_libdir}/libgstreamer-%{gstmver}.so.*.*.*
+%ghost %{_libdir}/libgstreamer-%{gstmver}.so.0
 %if "%{_libexecdir}" != "%{_libdir}"
 %dir %{gstlibexecdir}
 %endif
 %attr(755,root,root) %{gstlibexecdir}/gst-plugin-scanner
 %if %{with ptp_helper}
-# %caps(cap_net_bind_service,cap_net_admin,cap_sys_nice=ep) ?
-%attr(755,root,root) %{gstlibexecdir}/gst-ptp-helper
+%attr(755,root,root) %caps(cap_net_admin,cap_net_bind_service,cap_sys_nice=ep) %{gstlibexecdir}/gst-ptp-helper
 %endif
 %dir %{gstlibdir}
-%attr(755,root,root) %{gstlibdir}/libgstcoreelements.so
-%attr(755,root,root) %{gstlibdir}/libgstcoretracers.so
+%{gstlibdir}/libgstcoreelements.so
+%{gstlibdir}/libgstcoretracers.so
 # common for some plugins
 %dir %{_datadir}/gstreamer-1.0
 %{_mandir}/man1/gst-inspect-1.0.1*
@@ -260,11 +266,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{gstlibexecdir}/gst-hotdoc-plugins-scanner
 %attr(755,root,root) %{gstlibexecdir}/gst-plugins-doc-cache-generator
 %endif
-%attr(755,root,root) %{_libdir}/libgstbase-%{gstmver}.so
-%attr(755,root,root) %{_libdir}/libgstcheck-%{gstmver}.so
-%attr(755,root,root) %{_libdir}/libgstcontroller-%{gstmver}.so
-%attr(755,root,root) %{_libdir}/libgstnet-%{gstmver}.so
-%attr(755,root,root) %{_libdir}/libgstreamer-%{gstmver}.so
+%{_libdir}/libgstbase-%{gstmver}.so
+%{_libdir}/libgstcheck-%{gstmver}.so
+%{_libdir}/libgstcontroller-%{gstmver}.so
+%{_libdir}/libgstnet-%{gstmver}.so
+%{_libdir}/libgstreamer-%{gstmver}.so
 %dir %{gstincludedir}
 %{gstincludedir}/gst
 %{_datadir}/gir-1.0/Gst-%{gstmver}.gir
