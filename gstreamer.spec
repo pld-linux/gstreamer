@@ -9,12 +9,12 @@
 Summary:	GStreamer Streaming-media framework runtime
 Summary(pl.UTF-8):	GStreamer - biblioteki środowiska do obróbki strumieni
 Name:		gstreamer
-Version:	1.28.3
+Version:	1.28.4
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://gstreamer.freedesktop.org/src/gstreamer/%{name}-%{version}.tar.xz
-# Source0-md5:	a2cb777530dce369316a71bcab116907
+# Source0-md5:	f808a2e2d9836b9b6347b3ea377a085c
 Patch0:		%{name}-inspect-rpm-format.patch
 Patch1:		%{name}-no-libnsl.patch
 Patch2:		%{name}-no-libatomic.patch
